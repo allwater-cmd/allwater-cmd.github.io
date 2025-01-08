@@ -40,3 +40,6 @@ defaults:
       type: post
     values:
       tags: Other
+
+gravatar_hash: 20d496e2f95e33d7ce4fe82a2586f15862fe4f0cca1650b1e959848629b8d1cf
+code_block_max_height: 500px
