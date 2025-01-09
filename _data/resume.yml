@@ -27,7 +27,7 @@ sections:
   recognition:  false
   associations: true
   interests:    true
-  links:        true
+  links:        false
   social_links: false
 social:
   Website:    /
