@@ -1,35 +1,40 @@
 theme: default
 header:
-  name: Chad Baldwin
-  suffix: MCSA
+  name: Kyle Mitchell
+  suffix: MASc
   display_contact_info: true
-  current_title: Senior Database Developer
+  current_title: Hydrotechnical Engineer
   intro: >
-    Motivated and versatile software and database developer, MCSA certified in Database
-    Development. Proficient in schema design, data normalization techniques and query/index tuning.
-    Always looking for new challenges and new technologies to learn. Experienced with the software
-    development life cycle (SDLC) utilizing various project management methodologies including
-    Agile, Scrum and Kanban. Efficient working both independently and in a team environment.
+    Civil engineer specializing in hydrotechnical engineering with over five years of industry 
+    experience . Proficiencies encompass fluid mechanics, stormwater management, dam 
+    construction, and civil optimization heuristics. Extensive on-site experience, 
+    gained through work on large-scale civil projects in remote locations such as the 
+    Site C dam in Fort St. John, BC, has refined construction inspection skills 
+    and enhanced expertise in construction management for major initiatives. Roles have 
+    included design engineer, field engineer, and graduate teaching assistant, contributing 
+    to a strong foundation of theoretical knowledge and practical expertise through 
+    delivering lectures, overseeing laboratories, and engaging in both design and field 
+    projects.
 contact:
   #address: 123 Main St, Test, CA 91234
   #phone: (123) 456-7890
-  email: resume@chadbaldwin.net
+  email: kyle.mitchell@tetratech.com
 sections:
   experience:   true
   education:    true
-  projects:     true
+  projects:     false
   skills:       true
-  recognition:  true
-  associations: false
+  recognition:  false
+  associations: true
   interests:    true
   links:        true
   social_links: false
 social:
   Website:    /
-  GitHub:     https://github.com/chadbaldwin
-  Twitter:    https://twitter.com/chad_baldwin
+  #GitHub:    https://github.com/chadbaldwin
+  #Twitter:   https://twitter.com/chad_baldwin
   #Dribbble:  https://dribbble.com/chadbaldwin
   #FaceBook:  https://facebook.com/iamchadbaldwin
-  LinkedIn:   https://linkedin.com/in/chadbaldwin
+  LinkedIn:   https://www.linkedin.com/in/kyleptmitchell
   #Instagram: https://instagram.com/chad_baldwin
   #Medium:    https://medium.com/@chad-baldwin
