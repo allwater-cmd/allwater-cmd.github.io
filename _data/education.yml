@@ -1,12 +1,3 @@
-- degree: Bachelor of Applied Science (BASc.) with Distinction, Civil Engineering
-  uni: University of British Columbia
-  year: 2015 &mdash; 2019
-  awards:
-    - award: Chancellor\'s Scholar
-    - award: Graduated with Honors
-  summary: >
-    Focus on hydrotechnical engineering and fluid mechanics.
-
 - degree: Master of Applied Science (MASc.), Hydrotechnical Engineering
   uni: University of British Columbia
   year: 2020 &mdash; 2023
@@ -17,3 +8,12 @@
     - award: Grduate Research Assistantship
   summary: >
     Focus on system optimization heuristics (deterministic and stochastic) and environmental fluid mechanics.
+    
+- degree: Bachelor of Applied Science (BASc.) with Distinction, Civil Engineering
+  uni: University of British Columbia
+  year: 2015 &mdash; 2019
+  awards:
+    - award: Chancellor\'s Scholar
+    - award: Graduated with Honors
+  summary: >
+    Focus on hydrotechnical engineering and fluid mechanics.
