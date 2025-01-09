@@ -1,18 +1,22 @@
 
-- company: "Homecare Homebase"
-  summary: "Industry leader software solution for home-based care, streamlining everything from scheduling, mapping and routing to billing, compliance and revenue cycle management"
-  logo: "/img/companylogos/hchb.png"
-  url: "https://www.hchb.com/"
+- company: "Tetra Tech"
+  summary: "Premier worldwide consulting and engineering firm, focusing on water, environment, sustainable infrastructure, renewable energy, and international development."
+  logo: "/img/companylogos/tt.png"
+  url: "https://www.tetratech.com/"
   positions:
 
-  - title: "Data Engineer III"
-    startdate: 2022-05-23
+  - title: "Engineer II"
+    startdate: 2022-10-14
 #   enddate:
-    summary: "Specialized in research and development with a focus on performance tuning for SQL Server. Designed and implemented systems for identifying and solving complex database issues through innovative proof-of-concept systems and strategic process improvements. Demonstrated ability to deliver outside-the-box solutions that enhance data management and operational effectiveness."
+    summary: "Contributing to the design and implementation of water resource projects. Responsibilities encompass performing fieldwork such as data collection and site inspections, conducting hydraulic and hydrologic analyses using computer modeling software, and preparing technical reports summarizing project findings and recommendations."
     projects:
-      - "Developed a system to monitor millions of SQL Server indexes, enabling the identification and removal of unused indexes to optimize database performance and resource allocation. Leading to a significant reduction in superfluous write activity by removing unnecessary indexes while ensuring no performance regression."
-      - "Engineered an advanced analytics tool to evaluate physical index structures, successfully identifying and resolving issues with duplicate, overlapping, and mergeable indexes, which significantly enhanced query efficiency and storage utilization."
-      - "Designed and implemented a robust system for synchronizing and consolidating system metadata from hundreds of SQL Server instances into a central repository. This tool aids in monitoring and managing schema and configuration drift, improving consistency and control across the database environment."
+      - "Assist in the design and implementation of water resource projects, such as water supply and treatment systems."
+      - "Perform field work, including data collection and site inspections."
+      - "Conduct hydraulic and hydrologic analyses using computer modeling software."
+      - "Prepare reports and technical documents summarizing project findings and recommendations."
+      - "Work closely with senior engineering and project managers to ensure project success."
+      - "Adhere to all relevant regulations and standards in the field of water resources engineering."
+      - "Continuously develop and improve technical skills through training and professional development opportunities."
 
 - company: "AutoAlert"
   summary: "A data mining company dedicated to identifying leads in automotive dealerships customer data with the goal of helping them increase customer retention and sales."
