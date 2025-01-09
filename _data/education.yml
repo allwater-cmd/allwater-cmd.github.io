@@ -7,12 +7,13 @@
   summary: >
     Focus on hydrotechnical engineering and fluid mechanics.
 
-#- degree: High School Diploma
-#  uni: Fountain Valley High School
-#  year: 2008
-#  awards:
-#    - award: Graduated with Honors
-#    - award: STAR Advanced Computer Science Award
-#    - award: Coronet Award in Business Education and Computer Science
-#    - award: Track & Field JV MVP
-#  summary:
+- degree: Master of Applied Science (MASc.), Hydrotechnical Engineering
+  uni: University of British Columbia
+  year: 2020 &mdash; 2023
+  awards:
+    - award: Earl R. Peterson Memorial Scholarship in Civil Engineering
+    - award: UMA Scholarship in Civil Engineering
+    - award: Zygmunt Wolski Bursary
+    - award: Grduate Research Assistantship
+  summary: >
+    Focus on system optimization heuristics (deterministic and stochastic) and environmental fluid mechanics.
