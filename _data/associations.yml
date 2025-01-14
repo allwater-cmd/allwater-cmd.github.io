@@ -1,19 +1,16 @@
 # Sample entries >>
 
-- organization: PETA
-  role: Volunteer
-  year: 2001 &mdash; 2010
-  url: https://www.peta.org/
+- organization: Engineers & Geoscientists British Columbia (EGBC)
+  role: Engineer in Training (EIT)
+  startdate: 2019-06-01
+  # enddate:
+  url: https://www.egbc.ca/
   summary: >
-    Organized fund drives and participated in fundraising events for the benefit
-    of PETA's local Springfield operations.
+    Registered and in good standing as an Engineer in Training with the regulating body for all engineers and geoscientists in British Columbia.
 
-- organization: Yale Amnesty International
-  role: Communications coordinator
-  year: 2002 &mdash; 2004
-  url: http://campuspress.yale.edu/amnesty/
+- organization: Association of Engineers and Geoscientists Alberta (APEGA)
+  role: Member in Training (MIT)
+  startdate: 2019-06-01
+  url: https://www.apega.ca/
   summary: >
-    During my junion and senior years at Yale, I was actively involved in Yale Amnesty
-    International where I helped facilitate our student organization communications
-    through website maintenance, writing for our campus publication, and graphic
-    design of related materials.
+    Registered and in good standing as a Member in Training with the regulating body for all engineers and geoscientists in Alberta.
