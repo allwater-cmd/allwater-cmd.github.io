@@ -1,16 +1,15 @@
 # Sample entries >>
 
-- organization: Engineers & Geoscientists British Columbia (EGBC)
+- organization: Engineers and Geoscientists British Columbia (EGBC)
   role: Engineer in Training (EIT)
-  startdate: 2019-06-01
-  # enddate:
+  year: 2019 &mdash; Present
   url: https://www.egbc.ca/
   summary: >
     Registered and in good standing as an Engineer in Training with the regulating body for all engineers and geoscientists in British Columbia.
 
 - organization: Association of Engineers and Geoscientists Alberta (APEGA)
   role: Member in Training (MIT)
-  startdate: 2019-06-01
+  year: 2019 &mdash; Present
   url: https://www.apega.ca/
   summary: >
     Registered and in good standing as a Member in Training with the regulating body for all engineers and geoscientists in Alberta.
