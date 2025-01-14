@@ -5,7 +5,7 @@
   url: "https://www.tetratech.com/"
   positions:
 
-  - title: "Engineer II"
+  - title: "Hydrotechnical Engineer II"
     startdate: 2022-11-14
 #   enddate:
     summary: "Contributing to the design and implementation of water resource projects. Responsibilities encompass performing fieldwork such as data collection and site inspections, conducting hydraulic and hydrologic analyses using computer modeling software, and preparing technical reports summarizing project findings and recommendations."
@@ -18,48 +18,47 @@
       - "Adhere to all relevant regulations and standards in the field of water resources engineering."
       - "Continuously develop and improve technical skills through training and professional development opportunities."
 
-- company: "AutoAlert"
-  summary: "A data mining company dedicated to identifying leads in automotive dealerships customer data with the goal of helping them increase customer retention and sales."
-  logo: "/img/companylogos/aa.jpg"
-  url: "https://www.autoalert.com/"
+- company: "Northwest Hydraulic Consultants"
+  summary: "NHC\u0027s professionals analyze complex hydrologic and hydraulic conditions in the field, evaluate using sophisticated modelling software and physical models, develop planning and design solutions, oversee project construction, and monitor effectiveness to better understand and implement future projects."
+  logo: "/img/companylogos/nhc.png"
+  url: "https://nhcwater.com/"
   positions:
 
-  - title: "Database Developer"
-    startdate: 2015-10-01
-    enddate: 2022-05-13
-    summary: "Primarily working with SQL, C# and PowerShell; improved products by working with development and product teams to engineer back-end services, build databases and design schemas. Implemented ETL processes for importing, cleansing and normalizing automotive dealership data to be processed by our proprietary calculation engine."
+  - title: "On-Call Engineer I"
+    startdate: 2022-05-01
+    enddate: 2022-11-30
+    summary: "Engineering support was provided for various projects, including computational fluid dynamics modelling, physical modelling, CAD design, and hydraulic design, for both existing and future work. Remote work was utilized to support multiple NHC offices and field projects, offering flexible and adaptable engineering expertise as needed."
     projects:
-      - "Collaborated with 3rd party data providers to build integrations for tasks such as SalesForce data syncing, email/address sanitization, data appends and ETL processes"
-      - "Helped maintain and improve an elaborate calculation engine written in SQL to support new features and settings"
-      - "Tuned existing SQL code to run faster and more efficiently reducing both runtime and resource usage through query and index tuning by analyzing execution plans, server statistics, dynamic management views (DMVs), SQL Server First Responder Kit and SentryOne Plan Explorer"
-      - "Worked on many ETL projects using SQL, C#, PowerShell and batch scripting, and SSIS packages"
-      - "Contributed to complex back-end services written in C# utilizing technologies such as Elasticsearch, RabbitMQ, Redis, Amazon SNS, Amazon SES, Amazon S3, Docker, Selenium web scraping, and handling files via FTP"
-      - "Experience with using collaboration and CI/CD tools including Jenkins, Slack, Upsource, Jira and Confluence"
-      - "Worked primarily with SQL Server versions 2008, 2012, 2014 practicing good HA/DR policies, using replication and Always On availability groups"
-      - "Used AWS tools for troubleshooting, logging and deployment such as CloudWatch, CodeDeploy, and managing/monitoring servers through EC2"
+      - "Provided engineering support for existing and future work undertaken by NHC"
+      - "Worked remotely to support any NHC office as well as field projects"
+      - "Potential project scopes included but were not limited to: computational fluid dynamics modelling, physical modelling, CAD design, and hydraulic design"
 
-  - title: "Senior IT Support Analyst"
-    startdate: 2012-06-04
-    enddate: 2015-10-01
-    summary: "As an IT Support Analyst I was responsible for quickly triaging and troubleshooting issues in client data. Worked directly with clients over the phone to assist fixing data delivery issues. Built systems and tools to automate detection of bad data quality and reduce the work needed to fix."
-    projects:
-      - "Worked heavily with SSRS to write custom reports for all business needs ranging from simple tablix reports to intricate reports with benchmarks, charts, and complex expressions"
-      - "Established a reporting data warehouse to ensure consistent metrics across all reports"
-
-- company: "Albert A. Webb Associates"
-  summary:
-  logo: "/img/companylogos/aawa.png"
-  url: "https://www.webbassociates.com/"
+- company: "EBC Inc."
+  summary: "A Canadian construction industry leader, EBC is active in the building, mining, and major civil engineering sectors. In collaboration with its business partners, EBC carries out ambitious and diverse projects of the highest quality."
+  logo: "/img/companylogos/ebc.png"
+  url: "https://www.ebcinc.com/en/"
   positions:
 
-  - title: "IT Intern / Network Technician"
-    startdate: 2008-10-13
-    enddate: 2012-06-01
-    summary: "Supported a large multi-location network which hosted on-prem services for hundreds of civil engineers. Assisted in the installation and configuration of SAN, virtualization, network and power equipment."
+  - title: "Design Engineer I"
+    startdate: 2020-01-01
+    enddate: 2020-05-31
+    summary: "Responsible for the design and implementation of EFCO and Doka formwork for major project components. Assisted with on-site substitutions, submitting necessary reports, and establishing communications between suppliers, sub-contractors, professionals, and clients."
     projects:
-      - "Eliminated the need for hiring Cisco consultants by learning to support the Cisco devices through personal research, and formal courses offered at the local college"
-      - "In charge of installing, configuring and managing network monitoring software for hundreds of network devices using Nagios"
-      - "Established a reliable system for imaging and deploying desktops for new users"
+      - "Utilized previous field experience to effectively design EFCO and Doka formwork for the Headworks, Stilling Basin, and Powerhouse project components of Site C"
+      - "Assisted in the design of on-site substitutions, such as temporary scaffolds and StayForm replacements"
+      - "Accurately submitted Information Requests, Substitution Requests, and Non-Conformity Reports as required"
+      - "Established and kept necessary communications between suppliers, sub-contractors, professionals and clients"
+      
+  - title: "Field Engineer I"
+    startdate: 2019-06-01
+    enddate: 2019-12-31
+    summary: "Provided technical instructions to site superintendents and foremen, designing thermal control measures for concrete pours to ensure compliance with CSA standards, and leading daily meetings to prioritize actions."
+    projects:
+      - "Working as a member of the AFDE (AECON, Flatiron, Dragados, EBC) Group, reviewed and provided technical instructions based on the project specifications and procedures to site superintendents, foremen, and other field engineers"
+      - "Designed thermal control measures such as cooling layouts and sensor placements to ensure all concrete pours were kept within CSA standards for both mass concrete and cold weather curing"
+      - "Lead a daily meeting with all Generating Station and Spillway (GSS) teams to determine priority actions for the day and assign responsible field engineers to ensure these actions are completed"
+      - "Programed thermal control monitoring devices and oversaw all on-site installations to ensure concrete stayed within CSA specifications in extreme weather conditions for approximately 700,000 cubic meters of concrete"
+  
 
 #- company: American Money Group, Inc
 #  summary:
