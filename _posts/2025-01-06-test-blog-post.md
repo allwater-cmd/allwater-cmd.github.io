@@ -1,3 +1,7 @@
+tags: Test Post
+
+
+
 ## This is a test blog post
 
 \\[ \sum_{i=1}^{\infty}\frac{1}{n} \\]
