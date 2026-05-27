@@ -8,29 +8,65 @@ Two primary approaches existing for EVA, namely:
 This post will focus on only AMS data as it is the most relevant to hydrology. AMS data analysis may partly rely on the results of the Fisher-Tippett-Gnedenko theorem, which leads to the generalized extreme value distribution (GEVD) being selected for fitting. However, in practice, various procedures are applied to support fitting from a wider ranger of distribtuions. But let's take a minute to discuss Fisher-Tippett-Gnedenko theorem, as it serves as a foundational component in understanding EVA. 
 
 ## Fisher-Tippett-Gnedenko Theorem
-Henceforth in this post, Fisher-Tippett-Gnedenko theorem refers to the theorem within mathematical statistics. Its real analysis counterpart is referred to as the **extreme value theorem**. Fisher-Tippet-Gnedenko theorem tells us what happens to the maximum (or minimum) of a large sample of random values as the sample size grows very large. A helpful comparison (while not entirely correct) would be to consider this theorem as the central limit theorem but for extremes, where given a sufficiently large sample size, the distribution of the sample mean will eventually approximate a known distribtion (normal dsitribution, in the case of central limit theory).
+Fisher-Tippett-Gnedenko theorem is a theorem within mathematical statistics and is applicable for extreme values of single variables (univariate). Multivariate theory and non-stationary extremes will not be discussed due to their irrelevance in hydrology. Fisher-Tippet-Gnedenko theorem tells us what happens to the maximum (or minimum) of a large sample of random values as the sample size grows very large. A helpful comparison would be to consider this theorem as the Central Limit Theorem but for extremes, where given a sufficiently large sample size, the distribution of the sample mean will eventually approximate a known distribtion (normal dsitribution, in the case of central limit theory).
 
 The Fisher-Tipped-Gnedenko theorem states that if you take the maximums (or minimums) of many random samples, they tend to follow one of **three possible distributions**, no matter what the original data may have looked like. These three possible limit distribtions arise when you scale and shift the maximum values properly and are categorized by type:
-* Type 1: Gumbel Distribtuion (typical for rainfall and flood data with light tails).
-* Type 2: Fréchet Distribution (for heavy-tailed phenomena such as rare catestrophic events).
-* Type 3: Weibull (bounded data where values cannot exceed a limit, such as physical limits on flow). 
+* Type-I: Gumbel Distribtuion (typical for rainfall and flood data with light tails).
+* Type-II: Fréchet Distribution (for heavy-tailed phenomena such as rare catestrophic events).
+* Type-III Weibull (bounded data where values cannot exceed a limit, such as physical limits on flow). 
 
-So depending on a given dataset behaves at the extremes, the distribution of the largest values will look like one of the above. A simplified mathematical representation of what is stated above is: $ X_1 $
+So depending on how a given dataset behaves at the extremes, the distribution of the largest values will look like one of the above. Let's look at this mathematically and let $X_1, X_2, \ldots, X_n$ be inedependent and identically distributed random variables with distribution $F(x)$. Define $M_n = \max(X_1, X_2, \ldots, X_n)$. Then there exist constraints $a_n > 0, \hspace{6pt} b_n \in \mathbb{R}$ such that
 
-$$
-\begin{flalign*}
-& \text{Let } X_1, X_2, \ldots, X_n \text{ be i.i.d. random variables with distribution } F(x). \\
-& \text{Define } M_n = \max(X_1, X_2, \ldots, X_n). \\
-& \text{Then there exist constants } a_n > 0, \; b_n \in \mathbb{R} \text{ such that:} \\
-& \lim_{n \to \infty} P\left( \frac{M_n - b_n}{a_n} \le x \right) = G(x)
-\end{flalign*}
-$$
+$$ \lim_{n \to \infty} \mathbb{P}\left( \frac{M_n - b_n}{a_n} \le x \right) = G(x) $$
 
-Due to a plugin called `jekyll-titles-from-headings` which is supported by GitHub Pages by default. The above header (in the markdown file) will be automatically used as the pages title.
+where $G(x)$ is one of the extreme value distributions. But what does this mean intuitively? What are the constraints saying and what does the probability expression $\mathbb{P}$ mean? 
 
-If the file does not start with a header, then the post title will be derived from the filename.
+Let's look at this from the perspective of a typical hydrology dataset. In this case, $M_n$ is the maximum of $n$ observations (e.g. daily rainfall in a year). As $n$ grows, the raw maximum $M_n$ will also grow and will not stabilize on its own. So, we normalize them by subtracting a centering constant $b_n$ and divide by a scaling constant $a_n$. This is similar to the Central Limit Theorem which normalizes using mean and standard deviation ($\mu$, $\sigma$). Without these constraints, maxima may drift upward forever and a stable limiting distribution could not be reached. These constraints re-centre and re-scale the maxima so such that they converge to a meaningful shape.
 
-This is a sample blog post. You can talk about all sorts of fun things here.
+The probability expression $\mathbb{P}$ is effectively stating that the normalized maximum rainfall (or discharge) in a block of $n$ observations has a probability to be below some threshold $x$ as $n$ becomes large. This probability $\mathbb{P}$ then converges to $G(x)$.
+
+## Gumbel Distribution (Type-I)
+The Gumbel distribtuion, also known as the type-I generalized extreme value distribtuion, log-Weibull distribution, or double exponential distribution, is one of the particular cases of the FIsher-Tippett-Gnedenko distributions as previously discussed. The cumulative distribution function of the Gumbel disttribution for the maximum (not minimum) case is
+
+$$F(x;, \mu, \beta) = e^{-e^{-(x-\mu) / \beta}}$$
+
+where $\mu$ and $\beta$ are the [location](https://en.wikipedia.org/wiki/Location_parameter) and [scale](https://en.wikipedia.org/wiki/Scale_parameter), respectively. The [mode](https://en.wikipedia.org/wiki/Mode_(statistics)) is also $\mu$ with the median and mean being equal to $\mu - \beta\ln(\ln2)$ and $\mu + \beta\gamma$, respectively. Here, $\gamma$ is the [Euler-Mascheroni constant](https://en.wikipedia.org/wiki/Euler%E2%80%93Mascheroni_constant).
+
+### Standard Gumbel Distribtuion
+The standard Gumbel distribution is the case where $\mu = 0$ and $\beta = 1$ with the cumulative distribution function
+
+$$F(x) = e^{-e^{-x}}$$
+
+and probability density function
+
+$$f(x) = e^{-(x+e^{-x})}$$
+
+Let's work through an example using a synthetic 20-year precipitation dataset. The dataset has already been processed to present an annual maxima series of 24-hour (1-day) rainfall. Feel free to copy the table into an Excel sheet if Python isn't your thing.
+
+
+| year | annual_max_mm |
+| --- | --- |
+| 2001 | 82.4 |
+| 2002 | 95.1 |
+| 2003 | 101.3 |
+| 2004 | 88.7 |
+| 2005 | 112.5 |
+| 2006 | 134.2 |
+| 2007 | 97.8 |
+| 2008 | 105.6 |
+| 2009 | 121.4 |
+| 2010 | 109.2 |
+| 2011 | 140.3 |
+| 2012 | 115.7 |
+| 2013 | 102.9 |
+| 2014 | 118.4 |
+| 2015 | 126.1 |
+| 2016 | 137.9 |
+| 2017 | 110.6 |
+| 2018 | 99.4 |
+| 2019 | 123.8 |
+| 2020 | 131.7 |
+
 
 ---
 
