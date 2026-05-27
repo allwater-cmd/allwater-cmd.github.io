@@ -19,8 +19,11 @@ So depending on a given dataset behaves at the extremes, the distribution of the
 
 \\[
 \text{Let } X_1, X_2, \ldots, X_n \text{ be i.i.d. random variables with distribution } F(x). \\
+
 \text{Define } M_n = \max(X_1, X_2, \ldots, X_n). \\
+
 \text{Then there exist constants } a_n > 0, \; b_n \in \mathbb{R} \text{ such that:} \\
+
 \lim_{n \to \infty} P\left( \frac{M_n - b_n}{a_n} \le x \right) = G(x)
 \\]
 
