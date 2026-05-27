@@ -1,13 +1,13 @@
-title: "Allwater"
+title: "allwater"
 author: "Kyle Mitchell"
-description: "A 'blog' containing the semi-coherent ramblings of a water enthusiast. Can't code, maybe this will force me to learn." # This will show up in places like twitter, linkedin, etc, if you share your sites url as a post.
+description: "many things water" # This will show up in places like twitter, linkedin, etc, if you share your sites url as a post.
 
 # Email / Social media user names used by the minima theme:
 # All of these are optional and can be removed or commented out
-email: "kyle.mitchell@tetratech.com"
+# email: "kyle.mitchell@tetratech.com"
 # twitter_username: "twitteruser"
 # github_username: "githubuser"
-linkedin_username: "kyleptmitchell"
+# linkedin_username: "kyleptmitchell"
 #facebook_username: username
 #flickr_username: username
 #instagram_username: username
