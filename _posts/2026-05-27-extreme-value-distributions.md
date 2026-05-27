@@ -11,11 +11,13 @@ This post will focus on only AMS data as it is the most relevant to hydrology. A
 Henceforth in this post, Fisher-Tippett-Gnedenko theorem refers to the theorem within mathematical statistics. Its real analysis counterpart is referred to as the **extreme value theorem**. Fisher-Tippet-Gnedenko theorem tells us what happens to the maximum (or minimum) of a large sample of random values as the sample size grows very large. A helpful comparison (while not entirely correct) would be to consider this theorem as the central limit theorem but for extremes, where given a sufficiently large sample size, the distribution of the sample mean will eventually approximate a known distribtion (normal dsitribution, in the case of central limit theory).
 
 The Fisher-Tipped-Gnedenko theorem states that if you take the maximums (or minimums) of many random samples, they tend to follow one of **three possible distributions**, no matter what the original data may have looked like. These three possible limit distribtions arise when you scale and shift the maximum values properly and are categorized by type:
-* Type 1: Gumbel Distribtuion (normal, exponential, or any light-tailed data).
-* Type 2: Fréchet Distribution (heavy-tailed data such as Pareto or Cauchy).
-* Type 3: Weibull (bounded data where values cannot exceed a limit). 
+* Type 1: Gumbel Distribtuion (typical for rainfall and flood data with light tails).
+* Type 2: Fréchet Distribution (for heavy-tailed phenomena such as rare catestrophic events).
+* Type 3: Weibull (bounded data where values cannot exceed a limit, such as physical limits on flow). 
 
-So depending on a given dataset behaves at the extreems, the distribution of the largest values will look like one of the above. 
+So depending on a given dataset behaves at the extreems, the distribution of the largest values will look like one of the above. A simplified mathematical representation of what is stated above is:
+
+Let \\[ \; X_1, X_2, \ldots, X_n \; \text{be i.i.d. random variables with distribution } F(x). \\ Define \; M_n = \max(X_1, X_2, \ldots, X_n). \\[6pt] \text{Then there exist constants } a_n > 0, \; b_n \in \mathbb{R} \; \text{such that:} \\[6pt] \lim_{n \to \infty} P\left( \frac{M_n - b_n}{a_n} \le x \right) = G(x) \\]
 
 \\[ \sum_{i=1}^{\infty}\frac{1}{n} \\]
 
