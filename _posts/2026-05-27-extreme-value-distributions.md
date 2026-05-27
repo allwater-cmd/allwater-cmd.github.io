@@ -17,6 +17,8 @@ The Fisher-Tipped-Gnedenko theorem states that if you take the maximums (or mini
 
 So depending on a given dataset behaves at the extreems, the distribution of the largest values will look like one of the above. 
 
+\\[ \sum_{i=1}^{\infty}\frac{1}{n} \\]
+
 Due to a plugin called `jekyll-titles-from-headings` which is supported by GitHub Pages by default. The above header (in the markdown file) will be automatically used as the pages title.
 
 If the file does not start with a header, then the post title will be derived from the filename.
