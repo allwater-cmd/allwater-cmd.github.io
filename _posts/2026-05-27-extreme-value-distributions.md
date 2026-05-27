@@ -41,8 +41,7 @@ and probability density function
 
 $$f(x) = e^{-(x+e^{-x})}$$
 
-Let's work through an example using a synthetic 20-year precipitation dataset. The dataset has already been processed to present an annual maxima series of 24-hour (1-day) rainfall. Feel free to copy the table into an Excel sheet if Python isn't your thing.
-
+Let's work through an example using a synthetic 20-year precipitation dataset in Python. The dataset has already been processed to present an annual maxima series of 24-hour (1-day) rainfall. Feel free to copy the table into an Excel sheet if Python isn't your thing. Within the following sections, the data is assumed to come from `annual_max_rainfall.csv`. 
 
 | year | annual_max_mm |
 | --- | --- |
@@ -67,6 +66,50 @@ Let's work through an example using a synthetic 20-year precipitation dataset. T
 | 2019 | 123.8 |
 | 2020 | 131.7 |
 
+We will be utilizing **Numpy**, **Pandas**, and **SciPy**'s optimizer. A Gumbel distribtion and various related functions / methods are built into SciPy, but we will not be using them here. First we will need to import our data (assumed to be saved as a .csv) and store it in a dataframe. 
+
+```python
+import pandas as pd
+import numpy as np
+
+df = pd.read_csv("annual_max_rainfall.csv")
+x = df["annual_max_mm"].values
+n = len(x)
+```
+
+Next, we must decide if we're using the *Method of Moments* (MOM) or *Maximum Likelihood Estimation* (MLE) approach to generating the Gumbel distribution. For the purpose of learning and comparison, we will tackle both separately. The key differences of these approaches are sumamrized below.
+
+| Method | Advantages | Disadvantages | 
+| :--- | :--- | :--- |
+| Method of Moments | Simple, closed-form, fast | Less accurate for skewed extremes |
+| Maximum Liklihood Estimation | Statistically efficient, widely used | Requires numerical optimization |
+
+
+#### Method of Moments (MOM)
+When using the Method of Moments, we utilize the mean and standard deviation of the data to solve for our location $\mu$ and scale $\beta$ parameters. If we define $\bar{x}$ and $s$ to reflect mean and standard deviation respectively, and we know that
+
+$$\bar{x} = \mu + \gamma\beta$$
+$$ s = \frac{\pi}{\sqrt{6}}\beta$$
+
+then we can solve for $\mu$ and $\beta$
+
+$$\mu = \bar{x} - \gamma\beta$$
+$$\beta = s\frac{\sqrt{6}}{\pi}$$
+
+Recall that $\gamma$ is the Euler-Mascheroni constant and has a value of $\gamma = 0.5772156649$. To implement this in Python, we define `gamma`, `xbar`, `s`, `beta_nmom` and `mu_mom`and assign appropriate values or calculations. The delta degrees of freedom arugument `ddof` is set to 1 as we are assuming that our dataset is a sample statistic and not a population.
+
+```python
+gamma = 0.5772156649
+
+xbar = np.mean(x)
+s = np.std(x, ddof=1)
+
+beta_mom = s * np.sqrt(6) / np.pi
+mu_mom = xbar - gamma * beta_mom
+
+print("MOM μ:", mu_mom)
+print("MOM β:", beta_mom)
+```
 
 ---
 
