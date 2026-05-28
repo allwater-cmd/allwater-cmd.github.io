@@ -3,14 +3,14 @@ layout: default
 ---
 <link href="/css/override.css" rel="stylesheet" type="text/css">
 <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+<script src="https://polyfill.io"></script>
+<script id="MathJax-script" async src="https://jsdelivr.net"></script>
 
   <header class="post-header">
-    <script src="https://polyfill.io"></script>
-    <script id="MathJax-script" async src="https://jsdelivr.net"></script>
     <h1 class="post-title p-name" itemprop="name headline">{{ page.title | escape }}</h1>
     <p class="post-meta">
       <time class="dt-published" datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">
-        {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
+        {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%
         {{ page.date | date: date_format }}
       </time>
       {% assign author = page.author | default: site.author %}
