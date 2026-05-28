@@ -258,6 +258,6 @@ plt.show()
 
 Excluding the console output, the plots generated are provided below. 
 
-![Comparison of Method of Moments and Maximum Likelihood Estimation for a Gumbel Extreme Value Distribution](../img/extreme_value/gumbel_methods_comparison.png)
+![Comparison of Method of Moments and Maximum Likelihood Estimation for a Gumbel Extreme Value Distribution](/img/extreme_value/gumbel_methods_comparison.png)
 
 
