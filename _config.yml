@@ -42,11 +42,11 @@ defaults:
       path: ""
       type: post
     values:
-      image: https://s.gravatar.com/avatar/20d496e2f95e33d7ce4fe82a2586f15862fe4f0cca1650b1e959848629b8d1cf?s=800
+      image: https://s.gravatar.com/avatar/7aada0181eaba02bf691f8fc6c920bfb622b34ac8d17a3574d7d88f96495b12d?s=800
       tags: 
         - Other # Add a default tag to all posts
 
 home_post_limit: 5
 
-gravatar_hash: 20d496e2f95e33d7ce4fe82a2586f15862fe4f0cca1650b1e959848629b8d1cf
+gravatar_hash: 7aada0181eaba02bf691f8fc6c920bfb622b34ac8d17a3574d7d88f96495b12d
 code_block_max_height: 500px
