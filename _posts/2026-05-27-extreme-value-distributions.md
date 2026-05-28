@@ -1,3 +1,14 @@
+## Table of Contents
+
+- [Extreme Value Distributions](#extreme-value-distributions)
+  - [Fisher-Tippett-Gnedenko Theorem](#fisher-tippett-gnedenko-theorem)
+  - [Gumbel Distribution (Type-I)](#gumbel-distribution-type-i)
+    - [Standard Gumbel Distribution](#standard-gumbel-distribution)
+    - [Method of Moments (MOM)](#method-of-moments-mom)
+    - [Maximum Likelihood Estimation (MLE)](#maximum-likelihood-estimation-mle)
+    - [Return Levels (MOM and MLE)](#return-levels-mom-and-mle)
+      - [Bonus Plot](#bonus-plot)
+
 # Extreme Value Distributions
 Extreme value theory, or extreme value analysis (EVA), is the study of extremes in statistical distributions. This theory is extensively applied within hydrology for estimating rainfall distributions and / or flood events (such as a 100-year rainfall or 100-year flood). Similarly, it may be applied to estimate wave actions in the design hydraulic infrastructure. EVA may assess either the maxima or minima within a dataset, however, it is far more common to assess maxima within hydrology. 
 
@@ -32,7 +43,7 @@ $$F(x;, \mu, \beta) = \exp\left[-\exp\left(-\frac{x-\mu}{\beta}\right)\right]$$
 
 where $\mu$ and $\beta$ are the [location](https://en.wikipedia.org/wiki/Location_parameter) and [scale](https://en.wikipedia.org/wiki/Scale_parameter), respectively. The [mode](https://en.wikipedia.org/wiki/Mode_(statistics)) is also $\mu$ with the median and mean being equal to $\mu - \beta\ln(\ln2)$ and $\mu + \beta\gamma$, respectively. Here, $\gamma$ is the [Euler-Mascheroni constant](https://en.wikipedia.org/wiki/Euler%E2%80%93Mascheroni_constant).
 
-### Standard Gumbel Distribtuion
+### Standard Gumbel Distribution
 The standard Gumbel distribution is the case where $\mu = 0$ and $\beta = 1$ with the cumulative distribution function
 
 $$F(x) = \exp\left[-\exp\left(-x\right)\right]$$
@@ -121,7 +132,7 @@ MOM β: 12.818978711625254
 ```
 Let's look at approaching this from the Maximum Likelihood Estimation next, before plotting the two distributions together to observe any differences.
 
-#### Maximum Liklihood Estimation (MLE)
+#### Maximum Likelihood Estimation (MLE)
 The Maximum Liklihood Estimation uses numerical optimization to select parameters ($\mu$, $\beta$) that make the observed data **most likely**. So instead of matching moments ($\bar{x}$, $s$), MLE asks "if my dada came from a Gumbel distribution, which $\mu$ and $\beta$ make that most probable?". The Gumbel PDF is
 
 $$f(x) = \frac{1}{\beta}\exp\left[-\frac{x-\mu}{\beta}-\exp\left(-\frac{x-\mu}{\beta}\right)\right]$$
