@@ -89,11 +89,13 @@ Next, we must decide if we're using the *Method of Moments* (MOM) or *Maximum Li
 When using the Method of Moments, we utilize the mean and standard deviation of the data to solve for our location $\mu$ and scale $\beta$ parameters. If we define $\bar{x}$ and $s$ to reflect mean and standard deviation respectively, and we know that
 
 $$\bar{x} = \mu + \gamma\beta$$
+
 $$ s = \frac{\pi}{\sqrt{6}}\beta$$
 
 then we can solve for $\mu$ and $\beta$
 
 $$\mu = \bar{x} - \gamma\beta$$
+
 $$\beta = s\frac{\sqrt{6}}{\pi}$$
 
 Recall that $\gamma$ is the Euler-Mascheroni constant and has a value of $\gamma = 0.5772156649$. To implement this in Python, we define `gamma`, `xbar`, `s`, `beta_nmom` and `mu_mom`and assign appropriate values or calculations. The delta degrees of freedom arugument `ddof` is set to 1 as we are assuming that our dataset is a sample statistic and not a population.
