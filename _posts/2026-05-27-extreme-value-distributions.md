@@ -185,7 +185,7 @@ MOM β: 12.818978711625254
 MLE μ: 104.78637390431037
 MLE β: 14.866657527971807
 ```
-Very similar! But the MLE took quite a bit longer to set up and quite a bit more computational effort. Now let's derive return levels for both methods.
+Very similar. But the MLE took quite a bit longer to set up and quite a bit more computational effort. Now let's derive return levels for both methods.
 
 ### Return Levels (MOM and MLE)
 In hydrology, the return level is one of the most imporant outputs of extreme-value analysis. It tells us the maagnitute of an event associated with a given return period $T$. The inverse of the return period is the annual exceedance probability ($AEP$). A return level $x_T$ is defined such that
@@ -200,7 +200,7 @@ which with the Gumbel CDF expanded is
 
 $$\exp\left[-\exp\left(-\frac{x_T-\mu}{\beta}\right)\right] = 1 - \frac{1}{T}$$
 
-which can then be rearranged to solve for $x_T$ and directly relate a returl level based on the Gumbel distribution
+which can then be rearranged to solve for $x_T$ and directly relate a return level based on the Gumbel distribution
 
 $$ x_T = \mu - \beta\ln\left[-\ln\left(1-\frac{1}{T}\right)\right]$$
 
