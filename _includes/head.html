@@ -1,4 +1,3 @@
-
 <!-- Site build date: {{ "now" | date: "%FT%T%z" }} -->
 <head>
   <meta charset="utf-8">
@@ -17,6 +16,7 @@
   <!-- End Favicon -->
 
   <link rel="stylesheet" href="{{ "/assets/css/main.css" | relative_url }}">
+  <link rel="stylesheet" type="text/css" href="/assets/css/syntax.css">
   <link rel="stylesheet" type="text/css" href="/assets/css/override.css">
 
   {% feed_meta %}
@@ -27,26 +27,19 @@
   <!-- End Google Analytics -->
   {%- endif %}
 
-  <!-- Begin highlight.js support -->
-  <link rel="stylesheet" href="/js/highlightjs/styles/github.css">
-  <link rel="stylesheet" href="/js/highlightjs/styles/ssms.css" />
-
-  <script type="text/javascript" src="/js/highlightjs/highlight.min.js"></script>
-
-  <script type="text/javascript" src="/js/highlightjs/languages/plaintext.min.js"></script>
-  <script type="text/javascript" src="/js/highlightjs/languages/powershell.min.js"></script>
-  <script type="text/javascript" src="/js/highlightjs/languages/tsql.min.js"></script>
-
-  <script type="text/javascript"> hljs.highlightAll(); </script>
-  <!-- end highlight.js support -->
-
   {% if jekyll.environment == 'production' -%}
   <!-- dark theme using DarkReader -->
-  <script src="//unpkg.com/darkreader@4.9.40/darkreader.js"></script>
+  <script src="https://unpkg.com/darkreader@4.9.82/darkreader.js"></script>
   <script type="text/javascript">
-    DarkReader.setFetchMethod(window.fetch); // Fix to remedy CORS errors in chrome console
-    //DarkReader.enable();
-    DarkReader.auto( {brightness: 100, contrast: 90, sepia: 10} );
+    // Guard against the CDN being blocked, slow, or unreachable so the
+    // page never throws "DarkReader is not defined".
+    if (typeof DarkReader !== 'undefined') {
+      DarkReader.setFetchMethod(window.fetch); // avoid CORS errors in console
+      //DarkReader.enable();
+      DarkReader.auto({ brightness: 100, contrast: 90, sepia: 10 });
+    } else {
+      console.warn('DarkReader did not load from the CDN; skipping dark mode.');
+    }
   </script>
   {%- endif %}
   

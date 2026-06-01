@@ -1,4 +1,11 @@
-@import "syntax";      /* This looks for your syntax.css file */
-@import "override";    /* This looks for your override.css file */
+/* main.css
+   Global layout styles only.
 
-/* Add any global layout styles here if your theme requires them */
+   The Rouge syntax theme (syntax.css) and your custom overrides
+   (override.css) are now linked directly in _includes/head.html,
+   so they no longer need to be @imported here. Bare CSS @import
+   statements like `@import "syntax";` do not work in a plain .css
+   file (the browser won't append .css), which is why this file's
+   previous imports silently 404'd.
+
+   Add any site-wide layout rules below. */
