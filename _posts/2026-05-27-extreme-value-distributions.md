@@ -159,7 +159,6 @@ def gumbel_loglik(params, data):
         return np.inf
     z = (data - mu) / beta
     return -( -len(data)*np.log(beta) - np.sum(z) - np.sum(np.exp(-z)) )
-
 ```
 To numerically optimize, we will use `minimize` from `scipy.optimize`.
 
