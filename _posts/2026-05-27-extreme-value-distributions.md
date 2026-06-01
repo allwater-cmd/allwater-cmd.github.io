@@ -78,9 +78,7 @@ Let's work through an example using a synthetic 20-year precipitation dataset in
 | 2019 | 123.8 |
 | 2020 | 131.7 |
 
-We will be utilizing **Numpy**, **Pandas**, and **SciPy**'s optimizer. A Gumbel distribtion and various related functions / methods are built into SciPy, but we will not be using them here. First we will need to import our data (assumed to be saved as a .csv) and store it in a dataframe. 
-
-{% raw %}
+We will be utilizing **Numpy**, **Pandas**, and **SciPy**'s optimizer. A Gumbel distribtion and various related functions / methods are built into SciPy, but we will not be using them here. First we will need to import our data (assumed to be saved as a .csv) and store it in a dataframe.
 
 ```python
 import pandas as pd
@@ -90,8 +88,6 @@ df = pd.read_csv("annual_max_rainfall.csv")
 x = df["annual_max_mm"].values
 n = len(x)
 ```
-
-{$ endraw %}
 
 Next, we must decide if we're using the *Method of Moments* (MOM) or *Maximum Likelihood Estimation* (MLE) approach to generating the Gumbel distribution. For the purpose of learning and comparison, we will tackle both separately. The key differences of these approaches are sumamrized below.
 
