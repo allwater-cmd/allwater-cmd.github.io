@@ -81,6 +81,7 @@ Let's work through an example using a synthetic 20-year precipitation dataset in
 We will be utilizing **Numpy**, **Pandas**, and **SciPy**'s optimizer. A Gumbel distribtion and various related functions / methods are built into SciPy, but we will not be using them here. First we will need to import our data (assumed to be saved as a .csv) and store it in a dataframe.
 
 ```python
+
 import pandas as pd
 import numpy as np
 
@@ -113,6 +114,7 @@ $$\beta = s\frac{\sqrt{6}}{\pi}$$
 Recall that $\gamma$ is the Euler-Mascheroni constant and has a value of $\gamma = 0.5772156649$. To implement this in Python, we define `gamma`, `xbar`, `s`, `beta_nmom` and `mu_mom`and assign appropriate values or calculations. The delta degrees of freedom arugument `ddof` is set to 1 as we are assuming that our dataset is a sample statistic and not a population.
 
 ```python
+
 gamma = 0.5772156649
 
 xbar = np.mean(x)
@@ -128,6 +130,7 @@ print("MOM β:", beta_mom)
 Running what we presently have will provide the output
 
 ```console
+
 MOM μ: 105.35068467963029
 MOM β: 12.818978711625254
 ```
@@ -153,6 +156,7 @@ $$\ell(\mu,\beta) = -n\ln\beta-\sum\frac{x_i - \mu}{\beta} - \sum\exp\left(-\fra
 Good luck taking the derivative of that and finding its maxima witout numerical optimization (you'll find that if you take the partial derivatives with respect to $\mu$ and $\beta$ and try to optimize by setting them to 0, there is no [closed-form](https://en.wikipedia.org/wiki/Closed-form_expression) solution for Gumbel). For this reason we will have to use some in-built funcitons from `scipy`. To do this in Excel, you would need to use the numerical solver. Let's implement in Python by first defining our log-likelihood function.
 
 ```python
+
 def gumbel_loglik(params, data):
     mu, beta = params
     if beta <= 0:
@@ -163,6 +167,7 @@ def gumbel_loglik(params, data):
 To numerically optimize, we will use `minimize` from `scipy.optimize`.
 
 ```python
+
 from scipy.optimize import minimize
 
 mu0 = np.mean(x)
@@ -179,6 +184,7 @@ print("MLE β:", beta_mle)
 Now the console output should be 
 
 ```console
+
 MOM μ: 105.35068467963029
 MOM β: 12.818978711625254
 MLE μ: 104.78637390431037
@@ -206,6 +212,7 @@ $$ x_T = \mu - \beta\ln\left[-\ln\left(1-\frac{1}{T}\right)\right]$$
 Let's implement in Python and select of a bunch of return levels that we may be interested in, after defining the function above
 
 ```python
+
 def gumbel_return_level(T, mu, beta):
     return mu - beta * np.log(-np.log(1 - 1/T))
 
@@ -222,6 +229,7 @@ for T in Ts:
 The console should now show
 
 ```console
+
 MOM μ: 105.35068467963029
 MOM β: 12.818978711625254
 MLE μ: 104.78637390431037
@@ -249,6 +257,7 @@ Close, but not exaclty the same. In this case, the MLE approach provides larger 
 For fun, let's plot these distributions together and see how different they look visually. This may be more challenging in Excel as you'd may have to create an output column for each distribution prior being able to create a graph.
 
 ```python
+
 import matplotlib.pyplot as plt
 
 def gumbel_cdf(x, mu, beta):
