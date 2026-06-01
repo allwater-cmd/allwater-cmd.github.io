@@ -1,0 +1,16 @@
+---
+---
+
+// Base styles from the minima theme.
+//
+// This import targets minima's stable 2.x line, where the import path has
+// been "minima" for years and is not changing. Stability is enforced by
+// pinning the gem version (see the Gemfile note), so the build can never
+// silently jump to the skin-based 3.0 redesign, which uses a different,
+// incompatible import structure.
+@import "minima";
+
+// syntax.css (Rouge theme) and override.css are linked directly as <link>
+// tags in _includes/head.html, so they are not imported here.
+
+/* Add any site-wide layout styles below. */
