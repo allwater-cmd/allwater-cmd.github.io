@@ -49,3 +49,13 @@ hr {
   max-height: 500px;
   overflow-y: auto;
 }
+
+/* Make images in a post body span the full content width.
+   Scoped to .post-content so avatars, social icons, and resume
+   logos elsewhere on the site are left untouched. */
+.post-content img {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 1.5em auto;
+}
