@@ -24,8 +24,6 @@
 
 ## Acronyms and Notation
 
-## Acronyms and Notation
-
 To support readability, the following table summarizes the acronyms and key symbols used throughout this document.
 
 | Acronym / Symbol | Meaning | Description |
