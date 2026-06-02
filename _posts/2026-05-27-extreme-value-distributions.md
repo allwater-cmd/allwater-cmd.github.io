@@ -15,6 +15,14 @@
     - [Maximum Likelihood Estimation (MLE) (Fréchet)](#maximum-likelihood-estimation-fréchet)
     - [Return Levels (Fréchet)](#return-levels-fréchet)
         - [Bonus Plot (Fréchet)](#bonus-plot-fréchet)
+- [Weibull Distribution (Type-III)](#weibull-distribtion-type-iii)
+    - [Standard Weibull Distribution](#standard-weibull-distribution)
+    - [Maximum Likelihood Estimation (MLE) (Weibull)](#maximum-likelihood-estimation-mle-weibull)
+    - [Return Levels (Weibull)](#return-levels-weibull)
+        - [Bonus Plot (Weibull)](#bonus-plot-weibull)
+- [Comparison of Probability Density Functions](#comparison-of-probability-density-functions)
+
+## Acronyms and Notation
 
 ## Acronyms and Notation
 
@@ -30,15 +38,21 @@ To support readability, the following table summarizes the acronyms and key symb
 | **MLE** | Maximum Likelihood Estimation | A parameter estimation method that selects values maximizing the likelihood of the observed data. |
 | **CDF** | Cumulative Distribution Function | Function giving the probability that a random variable is less than or equal to a given value. |
 | **PDF** | Probability Density Function | Function describing the relative likelihood of a continuous random variable. |
-| $ \mu $ | Location parameter (Gumbel) | Controls the central tendency or shift of the distribution. |
-| $ \beta $ | Scale parameter (Gumbel) | Controls the spread or dispersion of the distribution. |
-| $ \alpha $ | Shape parameter (Fréchet) | Controls tail behaviour, particularly the heaviness of extremes. |
-| $ s $ | Scale parameter (Fréchet) | Controls the dispersion or scaling of the distribution. |
-| $ m $ | Location parameter (Fréchet) | Defines the lower bound (threshold) of the distribution. |
-| $ x_T $ | Return level | The magnitude of an event associated with a return period $ T $. |
-| $ T $ | Return period | The average time interval between occurrences of an event of a given magnitude. |
-| $ \gamma $ | Euler–Mascheroni constant | A constant (~0.5772) used in Gumbel moment relationships. |
-| $ \log $ / $ \ln $ | Natural logarithm | Logarithm base $ e $; used throughout likelihood derivations. |
+| **KDE** | Kernel Density Estimate | A smoothed approximation of the empirical probability density function. |
+| $ \mu$ | Location parameter (Gumbel) | Controls the central tendency or shift of the Gumbel distribution. |
+| $ \beta$ | Scale parameter (Gumbel) | Controls the spread or dispersion of the Gumbel distribution. |
+| $ \alpha$ | Shape parameter (Fréchet) | Governs tail behaviour; smaller values produce heavier tails. |
+| $ s$ | Scale parameter (Fréchet) | Controls dispersion in the Fréchet distribution. |
+| $ m$ | Location parameter (Fréchet) | Defines the lower bound (minimum threshold) of the Fréchet distribution. |
+| $ k$ | Shape parameter (Weibull) | Controls the curvature and tail behaviour of the Weibull distribution. |
+| $ \lambda$ | Scale parameter (Weibull) | Controls the spread of the Weibull distribution. |
+| $ \xi$ | Location parameter (Weibull) | Represents the upper bound (maximum possible value). |
+| $ x_T$ | Return level | The magnitude of an event associated with a return period $ T$. |
+| $ T$ | Return period | The average time interval between occurrences of an event of a given magnitude. |
+| $ \gamma$ | Euler–Mascheroni constant | A constant (~0.5772) used in Gumbel moment relationships. |
+| $ \log$ / $ \ln$ | Natural logarithm | Logarithm base $ e$; used throughout likelihood derivations. |
+
+Unless otherwise specified, all logarithms in this document refer to the natural logarithm (base $ e$), which is standard in statistical estimation and likelihood-based methods.
 
 Unless otherwise specified, all logarithms in this document refer to the natural logarithm (base $ e $), which is standard in statistical estimation and likelihood-based methods.
 
@@ -179,7 +193,7 @@ $$\mathcal{L}(\mu,\beta) = \prod_{i = 1}^{n}\frac{1}{\beta}\exp\left[-z_i-\exp(-
 
 where
 
-$$z = \frac{x-\mu}{\beta}$$
+$$z_i = \frac{x_i-\mu}{\beta}$$
 
 To make the numerical optimization easier, the log is often taken which results in
 
@@ -312,7 +326,7 @@ Excluding the console output, the plots generated are provided below.
 
 The Fréchet distribution, also known as the inverse Weibull distribution, is a special case of the generalized extreme value distribution. Similar to the Gumbel distribution above, it is generalized to include a location parameter $m$ and a scale parameter $s > 0$ with the general cumulative distribution function
 
-$$\mathbb{P}(X \leq x) = \exp\left[-\left(\frac{x-m}{s}\right)^{-\alpha}\right] \hspace{8pt} \text{if} \hspace{8pt} x>m $$
+$$F(x) = \exp\left[-\left(\frac{x-m}{s}\right)^{-\alpha}\right] \hspace{8pt} \text{if} \hspace{8pt} x>m $$
 
 
 where $\alpha > 0$ is a shape parameter. In hydrology, the Fréchet distribution is applied typically to extreme events as annual maximum one-day rainfalls and river discharges. In general, this distribution is used when the extrems are **more severe and less bounded**. 
@@ -325,7 +339,7 @@ $$f(x) = \frac{\alpha}{s}\left(\frac{x-m}{s}\right)^{-1-\alpha}\exp\left(-\frac{
 
 The standard Fréchet distribution is the case where $\alpha=1$, $s=1$, and $m=0$ with the cumulative distribution function
 
-$$\mathbb{P}(X \leq x) = \exp(-x^{-\alpha}) \hspace{8pt}\text{if} \hspace{8pt} x>0 $$
+$$F(x) = \exp(-x^{-\alpha}) \hspace{8pt}\text{if} \hspace{8pt} x>0 $$
 
 
 
@@ -349,7 +363,7 @@ Think of it like this - Fréchet allows very large values with non-negligible pr
 | $1 < \alpha \leq 2$ | Mean exists, variance $\rightarrow \infty$ |
 |$\alpha > 2$| Mean, variance $\rightarrow \infty$|
 
-The Maximum Likelihood approach remains the same, where we select parameters $(\alpha, s, m)$ that make the observed rainfall data most likely under a Fréchet model. The simplify the optimization, we again work with the log-likelihood. Let
+The Maximum Likelihood approach remains the same, where we select parameters $(\alpha, s, m)$ that make the observed rainfall data most likely under a Fréchet model. To simplify the optimization, we again work with the log-likelihood. Let
 
 $$ z_i = \frac{x_i-m}{s} $$
 
@@ -357,7 +371,7 @@ then the liklihood function is
 
 $$\mathcal{L}(\alpha,s, m) = \prod_{i = 1}^{n}\left[\frac{\alpha}{s}\left(z_i\right)^{-1-\alpha}\exp\left(-z_i^{-\alpha}\right)\right]$$
 
-which is is simplified by some complicated math involving natural logarithms to become
+which is simplified by some complicated math involving natural logarithms to become
 
 $$\ell(\alpha,s, m) = n\ln\alpha-n\ln s - (1+\alpha)\sum\ln z_i - \sum z_i^{-\alpha}$$
 
@@ -498,3 +512,244 @@ Excluding the console output, the plots generated are provided below. As can be 
 ![Comparison of Maximum Likelihood Estimation for Fréchet and Gumbel Extreme Value Distributions](/img/extreme_value/frechet_gumbel_comparison.png)
 
 ---
+
+## Weibull Distribtion (Type-III)
+
+The Weibull distribution, also referred to in extreme value theory as the Type-III distribution, represents the third and final limiting case arising from the Fisher-Tippett-Gnedenko theorem. Unlike the Gumbel and Fréchet distributions, which allow values to extend indefinitely, the Weibull distribution is used for **bounded datasets**, where values cannot exceed some physical limit. In hydrology, this may be relevant where there exists a natural upper-bound (e.g. storage capacity, phsysical constraints on flow) or observed extremes appear to approach a limiting value. 
+
+The general Weibull Distribution is defined using
+
+$$F(x) = \exp\left[-\left(\frac{\xi-x}{\lambda}\right)^k\right] \hspace{8pt} \text{if} \hspace{8pt} x < \xi$$
+
+where $k>0$ is the shape parameter, $\lambda>0$ is the scale parameter, and $\xi$ is the upper bound (location paramter). The corresponding generalized probability density function is
+
+$$f(x) = \frac{k}{\lambda}\left(\frac{\xi-x}{\lambda}\right)^{k-1}\exp\left[-\left(\frac{\xi-x}{\lambda}\right)^k\right]$$
+
+
+This upper bound $\xi$ introduces a fundamental constraint that $x<\xi$, meaning that all realizations are bounded above by $\xi$. The influence of these parameters as they relate to the shape of the Weibull distribution are presnted in the image below from the Weibell [Wikipedia](https://en.wikipedia.org/wiki/Weibull_distribution) article. You will immediately notice that the shape of the distribution varies significantly based on these paramters, far more than both the Gumbel and Fréchet distributions.
+
+![Weibull Distribution Parameter Dependence](/img/extreme_value/weibell_parameter_dependence.png)
+
+### Standard Weibull Distribution
+
+The standard Weibull cumulative distribution function can be written as
+
+$$F(x) = \exp\left[-(-x)^k\right] \hspace{8pt} \text{if} \hspace{8pt} x<0$$
+
+OF course, limiting $x$ to be less than 0 is not paricularly useful for real-world hydrologic data, so instead we work with the generalized form presented above.
+
+### Maximum Likelihood Estimation (MLE) (Weibull)
+
+As with the Fréchet distribution, we proceed using the Maximum Likelihood Estimation. The Method of Moments is not commonly applied here due to the nonlinear nature of the parameter relationships and the bounded support of the distribution. As with the previous distributions, lets define
+
+$$ z_i = \frac{\xi-x_i}{\lambda} $$
+
+then the liklihood function is
+
+$$\mathcal{L}(k,\xi, \lambda) = \prod_{i = 1}^{n}\frac{k}{\lambda}\left(z_i\right)^{k-1}\exp\left[-\left(z_i\right)^k\right]$$
+
+which is once again simplified by some complicated math involving natural logarithms to become
+
+$$\ell(k,\xi, \lambda) = n\ln k - n\ln\lambda + (k-1)\sum\ln z_i - \sum z_i^k$$
+
+Given the hard bounding of this distribution, we must enforce bounding for the optimization function to remain valid, namely
+
+$$z_i>0 \Rightarrow \xi>\max(x)$$
+
+which ensures that all observed values fall within the allowable domain of the distribution. To implement this in python, we will use our existing dataset. For this example I am assuming that you are appending new function definitions within the file that contains the Gumbel and Fréchet distributions. Therefore, we do not re-import anything or re-initiate our dataframe. As before, our function returns `-logL`, or the negative of the log-likelihood function for use in minimization.
+
+```python
+def weibull_loglik(params, data):
+    k, lam, xi = params
+    
+    if k <= 0 or lam <= 0:
+        return np.inf
+    
+    z = (xi - data) / lam
+    
+    if np.any(z <= 0):
+        return np.inf
+    
+    logL = (
+        len(data)*np.log(k)
+        - len(data)*np.log(lam)
+        + (k - 1)*np.sum(np.log(z))
+        - np.sum(z**k)
+    )
+    
+    return -logL
+```
+
+Utilizing `SciPy`'s built int `minimize` method as before, we define our initial conditions
+
+```python
+k0 = 2.0
+lam0 = np.std(x)
+xi0 = max(x) + 1
+
+res = minimize(
+    weibull_loglik,
+    x0=[k0, lam0, xi0],
+    args=(x,),
+    method="Nelder-Mead"
+)
+
+k_w, lam_w, xi_w = res.x
+
+print("Weibull k:", k_w)
+print("Weibull λ:", lam_w)
+print("Weibull ξ:", xi_w)
+```
+
+The console output should now show (excluding outputs from the previous distributions)
+
+```console
+Weibull k: 2.7021925256346258
+Weibull λ: 44.22977809322008
+Weibull ξ: 152.01264491428446
+```
+### Return Levels (Weibull)
+
+As before, return levels are defined through
+
+$$F(x_T) = 1 - \frac{1}{T} $$
+
+and after substituting the Weibull CDF
+
+$$\exp\left[-\left(\frac{\xi-x_T}{\lambda}\right)^k\right] = 1 - \frac{1}{T} $$
+
+we get from rearranging
+
+$$x_T = \xi - \lambda\left[-\ln\left(1-\frac{1}{T}\right)\right]^{1/k} $$
+
+To implement in python, we define this function
+
+```python
+def weibull_return_level(T, k, lam, xi):
+    return xi - lam * (-np.log(1 - 1/T))**(1/k)
+
+Ts = [2, 5, 10, 25, 50, 100]
+
+print("\nReturn Levels (Weibull):")
+for T in Ts:
+    print(T, weibull_return_level(T, k_w, lam_w, xi_w))
+```
+The console should now output (excluding outputs from prevoous distributions)
+
+```console
+Return Levels (Weibull):
+2 113.39293016600254
+5 126.62365278862828
+10 132.7800755871547
+25 138.4717120795552
+50 141.57511041149627
+100 143.95177314314148
+```
+These are now quite different than those provided by the Gumbel and Fréchet estimates. This is a direct result of $\xi$ imposing an aboslute bound or maximum value from the distribution. Notice that in our dataset our maximum of 140.3 mm is very close to that provided in the *estimated* distribution 100-year maximum of 143.95 mm. We do not have even close to 100-years of data, and yet Weibull is suggesting within in our dataset we're approaching our maxima (asymptote) already. Notice that we **defined out $\xi$ to be the maximum observed in our dataset plus 1**. We did this to ensure a simple positve buffer to our dataset, but in doing so we've also innately defined what we expect our aboslute maximum to be. This goes to show how Weibull is **not** an appropriate distribution to estimate the extremes of precipitation (with the exception of perhaps a probable maximum precipitation analysis).
+
+#### Bonus Plot (Weibull)
+
+Let's extend the previous plot and include the Weibull distribution, assuming `matplotlib.pyplot` was previously imported as `plt` and the Gumbel distribution is in the same file
+
+```python
+def weibull_cdf(x, k, lam, xi):
+    z = (xi - x) / lam
+    F = np.zeros_like(x)
+    valid = z > 0
+    F[valid] = np.exp(-(z[valid])**k)
+    return F
+
+xs = np.linspace(min(x)-10, max(x)+50, 400)
+
+plt.figure(figsize=(7,5))
+
+# Empirical CDF
+plt.scatter(np.sort(x), np.linspace(1/n, 1, n),
+            color="red", label="Empirical CDF")
+
+# Gumbel (MLE)
+plt.plot(xs, gumbel_cdf(xs, mu_mle, beta_mle),
+         label="Gumbel CDF")
+
+# Fréchet (MLE)
+plt.plot(xs, frechet_cdf(xs, alpha_mle, s_mle, m_mle),
+         label="Fréchet CDF")
+
+# Weibull (MLE)
+plt.plot(xs, weibull_cdf(xs, k_w, lam_w, xi_w),
+         label="Weibull CDF")
+
+plt.xlabel("Annual Maximum Daily Rainfall (mm)")
+plt.ylabel("Cumulative Probability")
+plt.legend()
+plt.grid(True)
+plt.show()
+```
+Excluding the console outputs, the plotted results are shown below. It is immediately clear that the Weibull maximum boundary is imposed, as immediately after `max(x) + 1`, we see a drop to a zero percent cumulative probability. 
+
+![Comparison of Maximum Likelihood Estimation for Weibull, Fréchet, and Gumbel Extreme Value Distributions](/img/extreme_value/weibull_frechet_gumbel_comparison.png)
+
+---
+
+## Comparison of Probability Density Functions
+
+The previous sections all showed a comparison of the cumulative distribution functions. While useful, sometimes CDFs can mask differences in how probability is distributed. To gain futher insight, we now plot the PDFs for each fitted distribution. Recall that the PDF describes the **relative likelihood** of observing values in different regions of the dataset.
+
+First we define the PDF functions corresponding to each distribution using MLE parameters
+
+```python
+def gumbel_pdf(x, mu, beta):
+    z = (x - mu) / beta
+    return (1/beta) * np.exp(-(z + np.exp(-z)))
+
+
+def frechet_pdf(x, alpha, s, m):
+    z = (x - m) / s
+    pdf = np.zeros_like(x)
+    valid = z > 0
+    pdf[valid] = (alpha/s) * (z[valid])**(-1-alpha) * np.exp(-(z[valid])**(-alpha))
+    return pdf
+
+
+def weibull_pdf(x, k, lam, xi):
+    z = (xi - x) / lam
+    pdf = np.zeros_like(x)
+    valid = z > 0
+    pdf[valid] = (k/lam) * (z[valid])**(k-1) * np.exp(-(z[valid])**k)
+    return pdf
+```
+
+and then generate the PDFs over a common range of values and generate a histogram for the empirical data
+
+```python
+xs = np.linspace(min(x)-10, max(x)+50, 400)
+
+plt.figure(figsize=(7,5))
+
+# Empirical PDF (histogram, normalized)
+plt.hist(x, bins=8, density=True, alpha=0.3,
+         color="gray", edgecolor="black",
+         label="Empirical Density")
+
+# Gumbel PDF
+plt.plot(xs, gumbel_pdf(xs, mu_mle, beta_mle),
+         label="Gumbel PDF")
+
+# Fréchet PDF
+plt.plot(xs, frechet_pdf(xs, alpha_mle, s_mle, m_mle),
+         label="Fréchet PDF")
+
+# Weibull PDF
+plt.plot(xs, weibull_pdf(xs, k_w, lam_w, xi_w),
+         label="Weibull PDF")
+
+plt.xlabel("Annual Maximum Daily Rainfall (mm)")
+plt.ylabel("Probability Density")
+plt.legend()
+plt.grid(True)
+plt.show()
+```
+
+which provides us with the plot shown below. Recall that the Fréchet and Gumbel distributions were effectively identical, and thus show no visible difference in the plot. The histogram of the empirical data drives home the assertion that the dataset used does not contain many (if any) extremes and is pretty well grouped. I recommend you try these on a real dataset and see how different all three distributions may be.
+
+![Comparison of Maximum Likelihood Estimation for Weibull, Fréchet, and Gumbel Extreme Value Distributions](/img/extreme_value/pdf_weibull_frechet_gumbel_comparison.png)
