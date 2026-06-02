@@ -50,8 +50,6 @@ To support readability, the following table summarizes the acronyms and key symb
 | $ \gamma$ | Euler–Mascheroni constant | A constant (~0.5772) used in Gumbel moment relationships. |
 | $ \log$ / $ \ln$ | Natural logarithm | Logarithm base $ e$; used throughout likelihood derivations. |
 
-Unless otherwise specified, all logarithms in this document refer to the natural logarithm (base $ e$), which is standard in statistical estimation and likelihood-based methods.
-
 Unless otherwise specified, all logarithms in this document refer to the natural logarithm (base $ e $), which is standard in statistical estimation and likelihood-based methods.
 
 # Extreme Value theory
