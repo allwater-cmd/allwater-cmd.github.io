@@ -1,6 +1,7 @@
 # Extreme Value Distributions
 ## Table of Contents
 
+- [Acronyms and Notation](#acronyms-and-notation)
 - [Extreme Value Theory](#extreme-value-theory)
 - [Fisher-Tippett-Gnedenko Theorem](#fisher-tippett-gnedenko-theorem)
 - [Gumbel Distribution (Type-I)](#gumbel-distribution-type-i)
@@ -14,6 +15,32 @@
     - [Maximum Likelihood Estimation (MLE) (Fréchet)](#maximum-likelihood-estimation-fréchet)
     - [Return Levels (Fréchet)](#return-levels-fréchet)
         - [Bonus Plot (Fréchet)](#bonus-plot-fréchet)
+
+## Acronyms and Notation
+
+To support readability, the following table summarizes the acronyms and key symbols used throughout this document.
+
+| Acronym / Symbol | Meaning | Description |
+|------------------|--------|-------------|
+| **EVA** | Extreme Value Analysis | The study of extreme events (maxima or minima), commonly applied to hydrology and environmental data. |
+| **AMS** | Annual Maxima Series | A dataset consisting of the maximum value observed in each year (e.g., annual maximum rainfall). |
+| **POT** | Peak Over Threshold | A method where all values exceeding a specified threshold are analyzed instead of block maxima. |
+| **GEV / GEVD** | Generalized Extreme Value (Distribution) | A unified distribution that includes Gumbel, Fréchet, and Weibull as special cases. |
+| **MOM** | Method of Moments | A parameter estimation technique based on matching sample moments (mean, variance) to theoretical moments. |
+| **MLE** | Maximum Likelihood Estimation | A parameter estimation method that selects values maximizing the likelihood of the observed data. |
+| **CDF** | Cumulative Distribution Function | Function giving the probability that a random variable is less than or equal to a given value. |
+| **PDF** | Probability Density Function | Function describing the relative likelihood of a continuous random variable. |
+| $ \mu $ | Location parameter (Gumbel) | Controls the central tendency or shift of the distribution. |
+| $ \beta $ | Scale parameter (Gumbel) | Controls the spread or dispersion of the distribution. |
+| $ \alpha $ | Shape parameter (Fréchet) | Controls tail behaviour, particularly the heaviness of extremes. |
+| $ s $ | Scale parameter (Fréchet) | Controls the dispersion or scaling of the distribution. |
+| $ m $ | Location parameter (Fréchet) | Defines the lower bound (threshold) of the distribution. |
+| $ x_T $ | Return level | The magnitude of an event associated with a return period $ T $. |
+| $ T $ | Return period | The average time interval between occurrences of an event of a given magnitude. |
+| $ \gamma $ | Euler–Mascheroni constant | A constant (~0.5772) used in Gumbel moment relationships. |
+| $ \log $ / $ \ln $ | Natural logarithm | Logarithm base $ e $; used throughout likelihood derivations. |
+
+Unless otherwise specified, all logarithms in this document refer to the natural logarithm (base $ e $), which is standard in statistical estimation and likelihood-based methods.
 
 # Extreme Value theory
 Extreme value theory, or extreme value analysis (EVA), is the study of extremes in statistical distributions. This theory is extensively applied within hydrology for estimating rainfall distributions and / or flood events (such as a 100-year rainfall or 100-year flood). Similarly, it may be applied to estimate wave actions in the design hydraulic infrastructure. EVA may assess either the maxima or minima within a dataset, however, it is far more common to assess maxima within hydrology. 
@@ -57,6 +84,10 @@ $$F(x) = \exp\left[-\exp\left(-x\right)\right]$$
 and probability density function
 
 $$f(x) = \exp\left[-\left(x+\exp(-x)\right)\right]$$
+
+To see the effects of these parameters, check out the image below from the [Wikipedia article](https://en.wikipedia.org/wiki/Gumbel_distribution) on the Fréchet Distribution. Note that the image shows the probability density function only.
+
+![Gumbel Distribution Parameter Dependence](/img/extreme_value/gumbel_parameter_dependence.jpg)
 
 Let's work through an example using a synthetic 20-year precipitation dataset in Python. The dataset has already been processed to present an annual maxima series of 24-hour (1-day) rainfall. Feel free to copy the table into an Excel sheet if Python isn't your thing. Within the following sections, the data is assumed to come from `annual_max_rainfall.csv`. 
 
@@ -330,7 +361,9 @@ which is is simplified by some complicated math involving natural logarithms to 
 
 $$\ell(\alpha,s, m) = n\ln\alpha-n\ln s - (1+\alpha)\sum\ln z_i - \sum z_i^{-\alpha}$$
 
-As before, there is no closed-form solution, so numerical optimization is required. The implement in python, we will again need to utilize `minimize` from `scipy.optimize`. We will also recreate our dataframe by reading from our file `annual_max_rainfall.csv`. Notice how our function `frechet_loglik` returns `-logL`. Recall that minimizing the negative of the log-likelihood is the same as maximizing the positive.
+As before, there is no closed-form solution, so numerical optimization is required. To implement in python, we will again need to utilize `minimize` from `scipy.optimize`. Note that if you are using the same python file that contains the Gumbel code, you do not need to re-import `pandas`, `numpy`, `scipy.optimize` nor re-initiate `df`, `x`, or `n`. I recommend you use your previous file and simply add everything from `def frechet_loglik(params,data):` onward. This will allow us to plot the distributions together (Fréchet and Gumbel). 
+
+Notice how our function `frechet_loglik` returns `-logL`. Recall that minimizing the negative of the log-likelihood is the same as maximizing the positive.
 
 ```python
 import pandas as pd
