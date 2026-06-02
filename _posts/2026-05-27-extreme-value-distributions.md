@@ -1,7 +1,7 @@
 # Extreme Value Distributions
 ## Table of Contents
 
-[Extreme Value Theory](#extreme-value-theory)
+- [Extreme Value Theory](#extreme-value-theory)
 - [Fisher-Tippett-Gnedenko Theorem](#fisher-tippett-gnedenko-theorem)
 - [Gumbel Distribution (Type-I)](#gumbel-distribution-type-i)
     - [Standard Gumbel Distribution](#standard-gumbel-distribution)
