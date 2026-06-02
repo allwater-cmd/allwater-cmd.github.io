@@ -698,14 +698,12 @@ def gumbel_pdf(x, mu, beta):
     z = (x - mu) / beta
     return (1/beta) * np.exp(-(z + np.exp(-z)))
 
-
 def frechet_pdf(x, alpha, s, m):
     z = (x - m) / s
     pdf = np.zeros_like(x)
     valid = z > 0
     pdf[valid] = (alpha/s) * (z[valid])**(-1-alpha) * np.exp(-(z[valid])**(-alpha))
     return pdf
-
 
 def weibull_pdf(x, k, lam, xi):
     z = (xi - x) / lam
