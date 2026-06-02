@@ -330,7 +330,7 @@ which is is simplified by some complicated math involving natural logarithms to 
 
 $$\ell(\alpha,s, m) = n\ln\alpha-n\ln s - (1+\alpha)\sum\ln z_i - \sum z_i^{-\alpha}$$
 
-As before, there is no closed-form solution, so numerical optimization is required. The implement in python, we will again need to utilize `minimize` from `scipy.optimize`. We will also recreate our dataframe by reading from our file `annual_max_rainfall.csv`.
+As before, there is no closed-form solution, so numerical optimization is required. The implement in python, we will again need to utilize `minimize` from `scipy.optimize`. We will also recreate our dataframe by reading from our file `annual_max_rainfall.csv`. Notice how our function `frechet_loglik` returns `-logL`. Recall that minimizing the negative of the log-likelihood is the same as maximizing the positive.
 
 ```python
 import pandas as pd
