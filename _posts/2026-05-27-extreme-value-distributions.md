@@ -52,7 +52,9 @@ To support readability, the following table summarizes the acronyms and key symb
 
 Unless otherwise specified, all logarithms in this document refer to the natural logarithm (base $ e $), which is standard in statistical estimation and likelihood-based methods.
 
-# Extreme Value theory
+---
+
+# Extreme Value Theory
 Extreme value theory, or extreme value analysis (EVA), is the study of extremes in statistical distributions. This theory is extensively applied within hydrology for estimating rainfall distributions and / or flood events (such as a 100-year rainfall or 100-year flood). Similarly, it may be applied to estimate wave actions in the design hydraulic infrastructure. EVA may assess either the maxima or minima within a dataset, however, it is far more common to assess maxima within hydrology. 
 
 Two primary approaches existing for EVA, namely:
