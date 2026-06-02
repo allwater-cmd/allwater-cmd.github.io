@@ -1,14 +1,19 @@
 # Extreme Value Distributions
 ## Table of Contents
 
-- [Extreme Value Theory](#extreme-value-theory)
-  - [Fisher-Tippett-Gnedenko Theorem](#fisher-tippett-gnedenko-theorem)
-  - [Gumbel Distribution (Type-I)](#gumbel-distribution-type-i)
+[Extreme Value Theory](#extreme-value-theory)
+- [Fisher-Tippett-Gnedenko Theorem](#fisher-tippett-gnedenko-theorem)
+- [Gumbel Distribution (Type-I)](#gumbel-distribution-type-i)
     - [Standard Gumbel Distribution](#standard-gumbel-distribution)
     - [Method of Moments (MOM)](#method-of-moments-mom)
-    - [Maximum Likelihood Estimation (MLE)](#maximum-likelihood-estimation-mle)
+    - [Maximum Likelihood Estimation (MLE) (Gumbel)](#maximum-likelihood-estimation-mle-gumbel)
     - [Return Levels (MOM and MLE)](#return-levels-mom-and-mle)
-      - [Bonus Plot](#bonus-plot)
+      - [Bonus Plot (Gumbel)](#bonus-plot-gumbel)
+- [Fréchet Distribution (Type-II)](#fréchet-distribution-type-ii)
+    - [Standard Fréchet Distribution](#standard-fréchet-distribution)
+    - [Maximum Likelihood Estimation (MLE) (Fréchet)](#maximum-likelihood-estimation-fréchet)
+    - [Return Levels (Fréchet)](#return-levels-fréchet)
+        - [Bonus Plot (Fréchet)](#bonus-plot-fréchet)
 
 # Extreme Value theory
 Extreme value theory, or extreme value analysis (EVA), is the study of extremes in statistical distributions. This theory is extensively applied within hydrology for estimating rainfall distributions and / or flood events (such as a 100-year rainfall or 100-year flood). Similarly, it may be applied to estimate wave actions in the design hydraulic infrastructure. EVA may assess either the maxima or minima within a dataset, however, it is far more common to assess maxima within hydrology. 
@@ -56,7 +61,7 @@ $$f(x) = \exp\left[-\left(x+\exp(-x)\right)\right]$$
 Let's work through an example using a synthetic 20-year precipitation dataset in Python. The dataset has already been processed to present an annual maxima series of 24-hour (1-day) rainfall. Feel free to copy the table into an Excel sheet if Python isn't your thing. Within the following sections, the data is assumed to come from `annual_max_rainfall.csv`. 
 
 | year | annual_max_mm |
-| --- | --- |
+| :---: | :---: |
 | 2001 | 82.4 |
 | 2002 | 95.1 |
 | 2003 | 101.3 |
@@ -96,8 +101,7 @@ Next, we must decide if we're using the *Method of Moments* (MOM) or *Maximum Li
 | Method of Moments | Simple, closed-form, fast | Less accurate for skewed extremes |
 | Maximum Liklihood Estimation | Statistically efficient, widely used | Requires numerical optimization |
 
-
-#### Method of Moments (MOM)
+### Method of Moments (MOM)
 When using the Method of Moments, we utilize the mean and standard deviation of the data to solve for our location $\mu$ and scale $\beta$ parameters. If we define $\bar{x}$ and $s$ to reflect mean and standard deviation respectively, and we know that
 
 $$\bar{x} = \mu + \gamma\beta$$
@@ -133,7 +137,7 @@ MOM β: 12.818978711625254
 ```
 Let's look at approaching this from the Maximum Likelihood Estimation next, before plotting the two distributions together to observe any differences.
 
-#### Maximum Likelihood Estimation (MLE)
+### Maximum Likelihood Estimation (MLE) (Gumbel)
 The Maximum Liklihood Estimation uses numerical optimization to select parameters ($\mu$, $\beta$) that make the observed data **most likely**. So instead of matching moments ($\bar{x}$, $s$), MLE asks "if my dada came from a Gumbel distribution, which $\mu$ and $\beta$ make that most probable?". The Gumbel PDF is
 
 $$f(x) = \frac{1}{\beta}\exp\left[-\frac{x-\mu}{\beta}-\exp\left(-\frac{x-\mu}{\beta}\right)\right]$$
@@ -245,7 +249,7 @@ Return Levels (MLE):
 ```
 Close, but not exaclty the same. In this case, the MLE approach provides larger return period estimations. Why might this be?
 
-#### Bonus Plot
+#### Bonus Plot (Gumbel)
 For fun, let's plot these distributions together and see how different they look visually. This may be more challenging in Excel as you'd may have to create an output column for each distribution prior being able to create a graph.
 
 ```python
@@ -271,4 +275,193 @@ Excluding the console output, the plots generated are provided below.
 
 ![Comparison of Method of Moments and Maximum Likelihood Estimation for a Gumbel Extreme Value Distribution](/img/extreme_value/gumbel_methods_comparison.png)
 
+---
 
+## Fréchet Distribution (Type-II)
+
+The Fréchet distribution, also known as the inverse Weibull distribution, is a special case of the generalized extreme value distribution. Similar to the Gumbel distribution above, it is generalized to include a location parameter $m$ and a scale parameter $s > 0$ with the general cumulative distribution function
+
+$$\mathbb{P}(X \leq x) = \exp\left[-\left(\frac{x-m}{s}\right)^{-\alpha}\right] \hspace{8pt} \text{if} \hspace{8pt} x>m $$
+
+
+where $\alpha > 0$ is a shape parameter. In hydrology, the Fréchet distribution is applied typically to extreme events as annual maximum one-day rainfalls and river discharges. In general, this distribution is used when the extrems are **more severe and less bounded**. 
+
+The generalized probability density function of the Fréchet distribution is
+
+$$f(x) = \frac{\alpha}{s}\left(\frac{x-m}{s}\right)^{-1-\alpha}\exp\left(-\frac{x-m}{s}^{-\alpha}\right)$$
+
+### Standard Fréchet Distribution
+
+The standard Fréchet distribution is the case where $\alpha=1$, $s=1$, and $m=0$ with the cumulative distribution function
+
+$$\mathbb{P}(X \leq x) = \exp(-x^{-\alpha}) \hspace{8pt}\text{if} \hspace{8pt} x>0 $$
+
+
+
+To see the effects of these parameters, check out the image below from the [Wikipedia article](https://en.wikipedia.org/wiki/Fr%C3%A9chet_distribution) on the Fréchet Distribution. Note that the image shows the probability density function.
+
+![Fréchet Distribution Parameter Dependence](/img/extreme_value/frechet_parameter_dependence.png)
+
+Now that we've worked through the Gumbel distribution using our annual maxima rainfall dataset, let's extend the exact same workflow to the Fréchet distribution. This can let us see and directly compare how a heavy-tailed distribution behaves relative to the lighter-tailed Gumbel.
+
+### Maximum Likelihood Estimation (Fréchet)
+
+Unlike the Gumbel distribution, the Fréchet distribution does not lend itself well to a simple Method of Moments solution in this context. As a result, we proceed directly with the Maximum Likelihood Estimation. But why is this?
+
+Recall that the Method of Moments works by matching mean and variance (standard deviation) to their theoretical expressions (recall in the Gumbel example we used the location $\mu$ and scale $\beta$ parameters to calculate mean and standard deviation). However, for the Fréchet distribution, the mean exists only if $\alpha > 1$, and the variance only exists if $\alpha > 2$. The reason behind this is complicated but is a consequence of the convergence requirements of the integrals used in calculating the mean and variance (not shown here for the sake of sanity). 
+
+Think of it like this - Fréchet allows very large values with non-negligible probability. As $\alpha$ decreases, the tail gets heavier, and the extreme values become more influential. The mean is an average, so if extremely large values occur often enough, they pull the average upward without bound. This results in no range of viable $\alpha$ to calculate mean and variance to derive the distribution parameters directly $(\alpha, s, m)$. A summary is below.
+
+| $\alpha$ Range | Consequence |
+| :--- | :--- |
+| $\alpha \leq 1$ | Mean $\rightarrow \infty$ (no finite average) |
+| $1 < \alpha \leq 2$ | Mean exists, variance $\rightarrow \infty$ |
+|$\alpha > 2$| Mean, variance $\rightarrow \infty$|
+
+The Maximum Likelihood approach remains the same, where we select parameters $(\alpha, s, m)$ that make the observed rainfall data most likely under a Fréchet model. The simplify the optimization, we again work with the log-likelihood. Let
+
+$$ z_i = \frac{x_i-m}{s} $$
+
+then the liklihood function is
+
+$$\mathcal{L}(\alpha,s, m) = \prod_{i = 1}^{n}\left[\frac{\alpha}{s}\left(z_i\right)^{-1-\alpha}\exp\left(-z_i^{-\alpha}\right)\right]$$
+
+which is is simplified by some complicated math involving natural logarithms to become
+
+$$\ell(\alpha,s, m) = n\ln\alpha-n\ln s - (1+\alpha)\sum\ln z_i - \sum z_i^{-\alpha}$$
+
+As before, there is no closed-form solution, so numerical optimization is required. The implement in python, we will again need to utilize `minimize` from `scipy.optimize`. We will also recreate our dataframe by reading from our file `annual_max_rainfall.csv`.
+
+```python
+import pandas as pd
+import numpy as np
+from scipy.optimize import minimize
+
+df = pd.read_csv("annual_max_rainfall.csv")
+x = df["annual_max_mm"].values
+n = len(x)
+
+def frechet_loglik(params, data):
+    alpha, s, m = params
+    
+    # enforce constraints
+    if alpha <= 0 or s <= 0:
+        return np.inf
+    
+    z = (data - m) / s
+    
+    # ensure valid domain
+    if np.any(z <= 0):
+        return np.inf
+    
+    logL = (
+        len(data)*np.log(alpha)
+        - len(data)*np.log(s)
+        - (1+alpha)*np.sum(np.log(z))
+        - np.sum(z**(-alpha))
+    )
+    
+    return -logL
+```
+
+Next, we call the optmizer and set our initial conditions
+
+```python
+alpha0 = 2.0
+s0 = np.std(x)
+m0 = min(x) - 1  # ensure m < data
+
+res = minimize(
+    frechet_loglik,
+    x0=[alpha0, s0, m0],
+    args=(x,),
+    method="Nelder-Mead"
+)
+
+alpha_mle, s_mle, m_mle = res.x
+
+print("Fréchet α:", alpha_mle)
+print("Fréchet s:", s_mle)
+print("Fréchet m:", m_mle)
+```
+After running, the console output should read
+
+```console
+Fréchet α: 79059310.52360749
+Fréchet s: 1175360005.6098711
+Fréchet m: -1175359900.823351
+```
+
+### Return Levels (Fréchet)
+
+The return level definition is identical to what we used before
+
+$$F(x_T) = 1 - \frac{1}{T}$$
+
+which, after substituting the Fréchet CDF and solving for $x_T$, becomes
+
+$$x_T = m + s\left[-ln\left(1-\frac{1}{T}\right)\right]^{-1/\alpha}$$
+
+To implement in python, we define this return level function and range of return levels to assess, just as before.
+
+```python
+def frechet_return_level(T, alpha, s, m):
+    return m + s * (-np.log(1 - 1/T))**(-1/alpha)
+
+Ts = [2, 5, 10, 25, 50, 100]
+
+print("\nReturn Levels (Fréchet):")
+for T in Ts:
+    print(T, frechet_return_level(T, alpha_mle, s_mle, m_mle))
+```
+
+After running, the console output should read (after expluding the parameter output)
+
+```console
+Return Levels (Fréchet):
+2 110.2353994846344
+5 127.08584833145142
+10 138.24231147766113
+25 152.3385329246521
+50 162.79591488838196
+100 173.17608165740967
+```
+
+In this particular example, the Gumbel and Fréchet return level predictions are nearly identical. This is not coincidental, but rather a reflection of the dataset itself. The annual maxima series does not exhibit strongly heavy-tailed behaviour, as there are no exceptionally large outliers or extreme deviations. As a result, when fitting the Fréchet distribution using MLE, the estimated shape parameter $\alpha$ becomes relatively large, which effectively reduces the heaviness of the tail. In this regime, the Fréchet distribution behaves similarly to a Gumbel distribution over the observed range of data. Additionally, the relatively small sample size limits our ability to distinguish between tail behaviours, causing both models to produce comparable return level estimates. Significant divergence between the two approaches would typically only arise in datasets that contain more pronounced extreme events.
+
+#### Bonus Plot (Fréchet)
+
+Let's extend the previous plot and include the Fréchet distribution, assuming `matplotlib.pyplot` was previously imported as `plt` and the Gumbel distribution is in the same file
+
+```python
+def frechet_cdf(x, alpha, s, m):
+    z = (x - m) / s
+    F = np.zeros_like(x)
+    valid = z > 0
+    F[valid] = np.exp(-(z[valid])**(-alpha))
+    return F
+
+xs = np.linspace(min(x)-10, max(x)+50, 400)
+
+plt.figure(figsize=(7,5))
+
+plt.scatter(np.sort(x), np.linspace(1/n, 1, n),
+            color="red", label="Empirical CDF")
+
+plt.plot(xs, gumbel_cdf(xs, mu_mle, beta_mle),
+         label="MLE Gumbel CDF")
+
+plt.plot(xs, frechet_cdf(xs, alpha_mle, s_mle, m_mle),
+         label="Fréchet CDF")
+
+plt.xlabel("Annual Maximum Daily Rainfall (mm)")
+plt.ylabel("Cumulative Probability")
+plt.legend()
+plt.grid(True)
+plt.show()
+```
+Excluding the console output, the plots generated are provided below. As can be seen, when the data does not strongly indicate heavy-tail behaviour, different extreme value models can converge to very similar predictions, even if their theoretical foundations differ.
+
+![Comparison of Maximum Likelihood Estimation for Fréchet and Gumbel Extreme Value Distributions](/img/extreme_value/frechet_gumbel_comparison.png)
+
+---
