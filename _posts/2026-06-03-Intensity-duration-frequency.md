@@ -3,7 +3,7 @@
 ## Acronyms and Notation
 
 # Preamble
-This post primarily discusses methods used by Environment Canada to develop Intensity-Duration-Frequency (IDF) information. The approaches and methods presented in subsequent sections may not be applicable to derivations in other regions. As such, this post makes extensive reference to the Canadian Standards Association (CSA) document *CSA PLUS 4013:19*, entitled *Development, interpretation, and use of rainfall intensity-duration-frequency (IDF) information: Guideline for Canadian water resources practitioners*. A copy of this document can be purchased [here](https://www.csagroup.org/store/product/CSA%20PLUS%204013%3A19/).
+This post primarily discusses methods used by Environment Canada (EC) to develop Intensity-Duration-Frequency (IDF) information. The approaches and methods presented in subsequent sections may not be applicable to derivations in other regions. As such, this post makes extensive reference to the Canadian Standards Association (CSA) document *CSA PLUS 4013:19*, entitled *Development, interpretation, and use of rainfall intensity-duration-frequency (IDF) information: Guideline for Canadian water resources practitioners*. A copy of this document can be purchased [here](https://www.csagroup.org/store/product/CSA%20PLUS%204013%3A19/).
 
 ## Recap of Extreme Value Statistics
 If you have read one of my previous posts (specifically [Extreme Vanlue Distributions](https://allwater-cmd.github.io/2026/05/27/extreme-value-distributions.html)) or are aware of hydrology at an introductory level, you're likely very familiar with the concept of **return periods**, but a brief high-level recap of the key considerations is provided below:
@@ -44,8 +44,37 @@ Every statistical estimate has a certain level of confidence associated with it.
 
 >IDF tables and graphs should **not** be produced for areas where less than 10 years of annual extremes are available. 
 
-# Derivation of IDF Curves
+# Derivation of IDF Curves by Environment Canada
 
-[work in progress]
+Data used by EC to develop IDF curves consist of rate-of-rainfall observations from tipping bucket rainfall gauge (TBRG) observations and daily rainfall amounts from standard rain guages. Unfortunately, access to the raw data from TBRG observations is not publicly available, and is only indirectly accessible through the final IDF curves provided by EC. Before looking at which specific datasets are used by EC, let's look at all that are recorded in the EC climate archives (not all programs are necessarily free or publicly available).
+
+| Program / Element Number| Units | Description |
+| :--- | :--- | :--- |
+| HLY03 / 123 | 0.1 mm | Hourly rainfall |
+| DLY03 / 124 | 0.01 | Adjustment factor for the day|
+| DLY03 / 125 | 0.1 mm | Greatest rainfall in 5 minutes for the day |
+| DLY03 / 126 | 0.1 mm | Greatest rainfall in 10 minutes for the day |
+| DLY03 / 127 | 0.1 mm | Greatest rainfall in 15 minutes for the day |
+| DLY03 / 128 | 0.1 mm | Greatest rainfall in 30 minutes for the day |
+| DLY03 / 129 | 0.1 mm | Greatest rainfall in 1 hour for the day |
+| DLY03 / 130 | 0.1 mm | Greatest rainfall in 2 hours for the day |
+| DLY03 / 131 | 0.1 mm | Greatest rainfall in 6 hours for the day |
+| DLY03 / 132 | 0.1 mm | Greatest rainfall in 12 hours for the day |
+
+Within the above table, the adjustment factor (DLY03 / 124) is the value used to adjust all of the TBRG values for one day uniformly such that the guage total for the day agrees with standard guage observations. This is done to reduce systematic errors and / or biases found in TBRG data. Additionally, the greatest 24-hour rainfall amount is not archived, but is instead calculated using the hourly data. The EC designations for the observing programs are DLY04 (daily rainfall observations from standard rain guages, not TBRG), DLY03 (daily maximum amounts for various durations from TBRG), and HLY03 (hourly rainfall amounts from TBRG).
+
+>CSA PLUS 4013:19 makes it clear that when users obtain EC observational data and compile other datasets for individual IDF calculations, the subjective aspects in the process used by EC as well as the user may result in the user's AMS not being identical to those used by EC.
+
+The figure below shows an example EC IDF curve provided for the Vancouver Harbour CS 1108446. This curve was developed from the calculated maximum 24-hour daily rainfall as well as the DLY03 programs presented in the above table where a Gumbel (Type-I) analysis using the MOM was completed for each rainfall duration. 
 
 ![Gumbel Distribution Parameter Dependence](/img/idf_curves/idf_v3-40_2025_12_5_110_BC_1108446_VANCOUVER_HARBOUR_CS.png)
+
+All of this naturally leads to the questions - how can we derive IDF curves ourselves without access to hourly or subhourly data? If EC captured subhourly data with tipping buckets, but don't provide the data, what do we do for regions where we don't have a direct IDF curve?
+
+It would be easy to just use the IDF_CC tool, but it's critical that a hydrotechnical engineer is capable of calculating this directly, without relying entirely on external tools. Let's look at a practical workflow when we only have 24-hour data available.
+
+## Daily Rainfall to Sub-Hourly IDFs
+
+When sub-hourly rainfall observations, such as TBRG data are unavailable, IDF curves must be built indirectly. The key idea is to **reconstruct short-duration extremes from daily extremes using statistical scaling and disaggregation**, while acknowledging that true IDF curves are normally derived from sub-hourly observation and extreme value analysis of their annual maxima.
+
+For the purposes of this example, I downloaded all available data from the Vancouver Harbour CS 1108446 and removed data before 1970 and after 2024. I did this to align with the range of years of data used to derive the IDF curve provided in the figure above. This way, we can do a direct comparison of hte final results using two different methodologies.
