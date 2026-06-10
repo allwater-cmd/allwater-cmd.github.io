@@ -473,6 +473,10 @@ I've nicely formatted the full results below for direct viewing.
 
 Notice from the above the relationship between the derived values and the EC reference values: at short durations, the derived intensities tend to underestimate the official values, often by 15–30%, while at longer durations the differences shrink and sometimes even reverse, with the derived values becoming slightly higher. This suggests that the underlying model or method used to generate the derived intensities aligns more closely with ECCC data at longer durations, while diverging more at the high‑intensity, short‑duration end of the spectrum. Overall, the dataset reflects a consistent hydrometeorological structure: intensity decreases with duration, increases with return period, and exhibits systematic bias patterns when compared to the reference dataset.
 
+**It is critical to note** that we are comparing our projection to the ***empirical*** data provided by EC, not the ***fit curve***. When we look at a comparison of the fit curves (i.e. the straight lines in the log-log space), our derived prediction using daily data is very similar to that developed by EC. Our overestimations and underestimations generally occur in the same places. This suggests that derivation using intensity scaling relationships, at least in this case for Vancouver Harbour CS, provides a defensible resultant IDF curve.
+
 ## Selection of Intensity Scaling Factor '$b$'
+
+## Depth-Duration-Frequency (DDF) Conversion
 
 [work in progress]
