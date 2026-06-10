@@ -77,4 +77,402 @@ It would be easy to just use the IDF_CC tool, but it's critical that a hydrotech
 
 When sub-hourly rainfall observations, such as TBRG data are unavailable, IDF curves must be built indirectly. The key idea is to **reconstruct short-duration extremes from daily extremes using statistical scaling and disaggregation**, while acknowledging that true IDF curves are normally derived from sub-hourly observation and extreme value analysis of their annual maxima.
 
-For the purposes of this example, I downloaded all available data from the Vancouver Harbour CS 1108446 and removed data before 1970 and after 2024. I did this to align with the range of years of data used to derive the IDF curve provided in the figure above. This way, we can do a direct comparison of hte final results using two different methodologies.
+For the purposes of this example, I downloaded all available data from the Vancouver Harbour CS 1108446 and removed data before 1970 and after 2024. I did this to align with the range of years of data used to derive the IDF curve provided in the figure above. This way, we can do a direct comparison of hte final results using two different methodologies. A copy of the dataset used can be downloaded from within the Github repository for this blog [here](https://github.com/allwater-cmd/allwater-cmd.github.io/blob/edff98db7feb2e76cf7b8ab6f61a5bee972dc5c9/datasets/vancouver_cs_data.csv).
+
+The first few rows of the example dataset look like the following, once all columns are removed except `LOCAL_DATE` and `TOTAL_PRECIPITATION`. Nore that the units of precipitation are in mm. Recall that for EC, 'total precipitation' includes both rainfall and snow water equivalent depths.
+
+| LOCAL_DATE        | TOTAL_PRECIPITATION |
+|:-------------------:|:----------------------:|
+| 1970-01-01 0:00   | 0                    |
+| 1970-01-02 0:00   | 1.8                  |
+| 1970-01-03 0:00   | 0                    |
+| 1970-01-04 0:00   | 0                    |
+| 1970-01-05 0:00   | 0                    |
+| 1970-01-06 0:00   | 0                    |
+| 1970-01-07 0:00   | 0                    |
+| 1970-01-08 0:00   | 18.5                 |
+| 1970-01-09 0:00   | 0                    |
+| 1970-01-10 0:00   | 2.5                  |
+| 1970-01-11 0:00   | 0                    |
+| ...  | ...   |
+
+Now for Python. We first must load the CSV files and extract the daily precipitation time series. The goal is to construct a continuous record of daily depths from the `TOTAL_PRECIPITATION` field. Make sure `vancouver_cs_data.csv` is saved in the same directory as your Python file. 
+
+```python
+import pandas as pd
+import os
+
+# Set the current working directory to be the script location
+script_dir = os.path.dirname(os.path.abspath(__file__))
+os.chdir(script_dir)
+
+# Load your uploaded dataset
+df = pd.read_csv("vancouver_cs_data.csv")
+
+# Inspect columns
+print(df.columns)
+
+# Convert date column (adjust name if needed)
+df["LOCAL_DATE"] = pd.to_datetime(df["LOCAL_DATE"])
+
+# Keep relevant fields
+df = df[["LOCAL_DATE", "TOTAL_PRECIPITATION"]].copy()
+
+# Drop missing or flagged values
+df = df[df["TOTAL_PRECIPITATION"].notna()]
+
+# Rename for convenience
+df.rename(columns={"TOTAL_PRECIPITATION": "P_mm"}, inplace=True)
+
+print(df.head())
+```
+
+This will print all columns and then the first five rows of the trimmed and renamed dataframe in the console.
+
+```console
+Index(['STATION_NAME', 'CLIMATE_IDENTIFIER', 'LOCAL_DATE', 'PROVINCE_CODE',
+       'LOCAL_YEAR', 'LOCAL_MONTH', 'LOCAL_DAY', 'TOTAL_PRECIPITATION',
+       'TOTAL_RAIN', 'TOTAL_SNOW'],
+      dtype='object')
+  LOCAL_DATE  P_mm
+0 1970-01-01   0.0
+1 1970-01-02   1.8
+2 1970-01-03   0.0
+3 1970-01-04   0.0
+4 1970-01-05   0.0
+```
+
+We should now have a clean time series of daily precipitation depths in mm. Sicne EC daily data may be derived from either direct daily observations or aggregated hourly station data, this column is already a processed representation of precipitation over each climatological day.
+
+Next, let's extract annual maximum daily rainfall data. This replicates the core idea used in IDF derivation and is foundational as IDF curves are based on the statistical behaviour of extreme rainfall events. 
+
+```python
+# Add year column
+df["year"] = df["LOCAL_DATE"].dt.year
+
+# Annual maxima (24-hour rainfall)
+annual_max = df.groupby("year")["P_mm"].max()
+
+print(annual_max.head())
+```
+
+The above will print out (when ignoring outputs from the previous step) the first five rows of annual maxima.
+
+```console
+year
+1970     55.1
+1971     61.0
+1972    203.2
+1973     61.0
+1974     82.6
+```
+
+We will now fit a Gumbel distribution to the annual maxima following the standard hydrologic practice. The Method of Moments will be used to be consistent with EC. We will not use `scipy.stats` built in function `gumbel_r` here as it does not use the Method of Moments. Recall the the parameters derived from the sample mean sand standard deviation (from our dataset) are defined as
+
+$$ \beta = \frac{\sqrt{6}}{\pi}s \hspace{8pt} \text{and} \hspace{8pt}  \mu = \bar{x} - \gamma\beta $$
+
+where:
+
+$\bar{x}$ is the sample mean;
+$\\s$ is the sample standard deviation, and;
+$\\\gamma = 0.5772$ is the Euler-Mascheroni constant. 
+
+We then implement this directly.
+
+
+```python
+import numpy as np
+
+# Annual extrema
+x = annual_max.values
+
+# Sample mean and standard deviation
+mean = np.mean(x)
+std = np.std(x, ddof=1)
+
+# Euler-Mascheroni constant
+gamma = 0.5772
+
+# Calculating location and scale
+beta = std * np.sqrt(6) / np.pi
+mu = mean - gamma * beta
+
+print(f"mu (location) = {mu:.2f}")
+print(f"beta (scale) = {beta:.2f}")
+```
+
+The calculated location and scale should be
+
+```console
+mu (location) = 54.61
+beta (scale) = 21.33
+```
+
+To compute the Gumbel quantile function using the above calculated parameters, we use
+
+$$ x_T = \mu - \beta\ln \left[-\ln \left(1-\frac{1}{T}\right)\right] $$
+
+The rainfall depths are then calculated for standard return periods
+
+```python
+T = np.array([2, 5, 10, 25, 50, 100])
+
+P24 = mu - beta * np.log(-np.log(1 - 1/T))
+
+for t, val in zip(T, P24):
+    print(f"{t}-year 24hr rainfall: {val:.1f} mm")
+```
+
+This provides the 24-hour design storm depths, which will form the backbone of the IDF curve. The console output should be (when ignoring previous outputs):
+
+```console
+2-year 24hr rainfall: 62.4 mm
+5-year 24hr rainfall: 86.6 mm
+10-year 24hr rainfall: 102.6 mm
+25-year 24hr rainfall: 122.8 mm
+50-year 24hr rainfall: 137.9 mm
+100-year 24hr rainfall: 152.7 mm
+```
+
+Converting to intensities (mm/hr) is very easy, we just divide by the total depth by 24 hours. 
+
+```python
+i24 = P24 / 24.0
+```
+
+Because daily data contain no information about sub-daily storm intensity, we must apply a duration scaling relationship. Emperical rainfall studies consistently show that intensity increases as duration decreases, typically following a power law. First, lets define our durations
+
+```python
+durations_hr = np.array([5/60, 10/60, 15/60, 0.5, 1, 2, 6, 12, 24])
+```
+
+To which we can then apply 
+
+$$i(d) = i_{24h}\left(\frac{d}{24}\right)^{-b}$$
+
+where $b = 0.45$ is a reasonable choice for coastal climates like Vancouver. You are likely (and rightfully so) asking how we pulled a $b$ value out of thin air. This will be discussed further below, but for now we can just accept it as true.
+
+```python
+b = 0.45
+
+idf_curves = {}
+
+for idx, t in enumerate(T):
+    intensities = i24[idx] * (durations_hr / 24)**(-b)
+    idf_curves[t] = intensities
+```
+
+We won't print the `idf_curves` dictionary here as it is currently a dictionary of arrays and is not very useful to look at directly. Instead, lets plot the curve. To be comparable to the format presented by EC previously, we'll explicitly define alternative x-and-y-axis ticks (rather than a simple log-log).
+
+```python
+# Convert durations to minutes for plotting
+durations_min = durations_hr * 60
+
+# Create figure
+plt.figure(figsize=(8,6))
+
+# Plot curves
+for t in T:
+    plt.plot(durations_min, idf_curves[t], label=f"{t}-yr")
+
+# Log scale (standard for IDFs)
+plt.xscale("log")
+plt.yscale("log")
+
+# ----- Custom X-axis ticks -----
+# Minutes (5–60) and hours (2–24 converted to minutes)
+x_ticks_minutes = [5, 10, 15, 30, 60]
+x_ticks_hours = [2*60, 6*60, 12*60, 24*60]
+
+x_ticks = x_ticks_minutes + x_ticks_hours
+x_labels = ["5", "10", "15", "30", "60", "2h", "6h", "12h", "24h"]
+
+plt.xticks(x_ticks, x_labels)
+
+# ----- Custom Y-axis ticks -----
+y_ticks = (
+    list(range(1, 11)) +          # 1–10
+    list(range(20, 101, 10)) +    # 20–100
+    list(range(200, 601, 100))    # 200–600
+)
+
+plt.yticks(y_ticks, [str(y) for y in y_ticks])
+
+# Labels and formatting
+plt.xlabel("Duration")
+plt.ylabel("Intensity (mm/hr)")
+plt.title("IDF Curves (Method of Moments, Vancouver Harbour CS)")
+plt.legend()
+plt.grid(True, which="both", linestyle="--", linewidth=0.5)
+
+plt.show()
+```
+The output should be the figure below.
+
+![Daily Derived IDF for Vancouver Harbour CS](/img/idf_curves/daily_derived_idf_vancouver_cs.png)
+
+How does this compare to that derived by EC? Let's compare. I've imported the tabulated IDF data for Vancouver Harbour CS from EC and we will import it into our Python script.
+
+```python
+# Durations (minutes)
+durations_min = np.array([5, 10, 15, 30, 60, 120, 360, 720, 1440])
+
+# Return periods matching our derivation
+T = np.array([2, 5, 10, 25, 50, 100])
+
+idf_eccc = {
+    2:  [40.6, 29.8, 23.8, 16.1, 10.7, 8.3, 5.6, 4.1, 2.8],
+    5:  [55.1, 44.2, 35.0, 22.1, 13.8, 10.3, 6.8, 4.9, 3.6],
+    10: [64.7, 53.8, 42.4, 26.0, 15.9, 11.6, 7.5, 5.5, 4.1],
+    25: [76.8, 65.9, 51.8, 31.0, 18.6, 13.2, 8.4, 6.2, 4.7],
+    50: [85.8, 74.8, 58.7, 34.7, 20.5, 14.4, 9.1, 6.7, 5.2],
+    100:[94.7, 83.7, 65.6, 38.4, 22.4, 15.6, 9.8, 7.2, 5.6]
+}
+```
+
+We will the overlay our own curves with EC values.
+
+```python
+plt.figure(figsize=(9,6))
+
+for t in T:
+    # Our derived IDF
+    plt.plot(durations_min, idf_curves[t],
+             linestyle='--', linewidth=1.8,
+             label=f"{t}-yr (Derived, MOM)")
+
+    # EC IDF
+    plt.plot(durations_min, idf_eccc[t],
+             linestyle='-', marker='o',
+             linewidth=2,
+             label=f"{t}-yr (ECCC)")
+
+plt.xscale("log")
+plt.yscale("log")
+
+# Custom X-axis (as previously defined)
+plt.xticks(
+    [5,10,15,30,60,120,360,720,1440],
+    ["5","10","15","30","60","2h","6h","12h","24h"]
+)
+
+# Custom Y-axis
+y_ticks = list(range(1,11)) + list(range(20,101,10)) + list(range(200,601,100))
+plt.yticks(y_ticks, [str(y) for y in y_ticks])
+
+plt.xlabel("Duration")
+plt.ylabel("Intensity (mm/hr)")
+plt.title("IDF Comparison: Derived (MOM + Scaling) vs ECCC")
+plt.grid(True, which="both", linestyle="--", linewidth=0.5)
+
+plt.legend(ncol=2, fontsize=8)
+plt.show()
+```
+Which provides the plot below. Generally not a bad fit, thought it is a bit challenging to actually see what the absolute or relative differences are.
+
+![Daily Derived IDF for Vancouver Harbour CS vs. EC](/img/idf_curves/derived_vs_ec_vancouver_harbour_cs.png)
+
+Instead of trying to calculate the different between the two plots visually, we can instead create a table.
+
+```python
+# Durations (minutes)
+durations_min = np.array([5, 10, 15, 30, 60, 120, 360, 720, 1440])
+
+# Initialize list to store results
+results = []
+
+for t in T:
+    for i, d in enumerate(durations_min):
+        derived = idf_curves[t][i]
+        eccc = idf_eccc[t][i]
+        
+        abs_diff = derived - eccc
+        pct_diff = (abs_diff / eccc) * 100
+        
+        results.append({
+            "Return Period (yr)": t,
+            "Duration (min)": d,
+            "Derived (mm/hr)": derived,
+            "ECCC (mm/hr)": eccc,
+            "Abs Diff (mm/hr)": abs_diff,
+            "% Diff": pct_diff
+        })
+
+df_compare = pd.DataFrame(results)
+
+print(df_compare.head())
+```
+This should output (ignoring previous outputs) the first five entires of the comparison table.
+
+```console
+   Return Period (yr)  Duration (min)  Derived (mm/hr)  ECCC (mm/hr)  Abs Diff (mm/hr)     % Diff
+0                   2               5        33.258337          40.6         -7.341663 -18.082915
+1                   2              10        24.346527          29.8         -5.453473 -18.300243
+2                   2              15        20.285978          23.8         -3.514022 -14.764796
+3                   2              30        14.850205          16.1         -1.249795  -7.762699
+4                   2              60        10.870987          10.7          0.170987   1.598007
+```
+I've nicely formatted the full results below for direct viewing.
+
+| Return Period (yr) | Duration (min) | Derived (mm/hr) | ECCC (mm/hr) | Abs Diff (mm/hr) | % Diff |
+|:--------------------:|:----------------:|:------------------:|:--------------:|:-------------------:|:--------:|
+| 2 | 5 | 33.258 | 40.6 | -7.342 | -18.083 |
+| 2 | 10 | 24.347 | 29.8 | -5.453 | -18.300 |
+| 2 | 15 | 20.286 | 23.8 | -3.514 | -14.765 |
+| 2 | 30 | 14.850 | 16.1 | -1.250 | -7.763 |
+| 2 | 60 | 10.871 | 10.7 | 0.171 | 1.598 |
+| 2 | 120 | 7.958 | 8.3 | -0.342 | -4.120 |
+| 2 | 360 | 4.854 | 5.6 | -0.746 | -13.321 |
+| 2 | 720 | 3.553 | 4.1 | -0.547 | -13.333 |
+| 2 | 1440 | 2.601 | 2.8 | -0.199 | -7.100 |
+| 5 | 5 | 46.140 | 55.1 | -8.960 | -16.261 |
+| 5 | 10 | 33.777 | 44.2 | -10.423 | -23.582 |
+| 5 | 15 | 28.143 | 35.0 | -6.857 | -19.590 |
+| 5 | 30 | 20.602 | 22.1 | -1.498 | -6.778 |
+| 5 | 60 | 15.082 | 13.8 | 1.282 | 9.287 |
+| 5 | 120 | 11.040 | 10.3 | 0.740 | 7.189 |
+| 5 | 360 | 6.734 | 6.8 | -0.066 | -0.969 |
+| 5 | 720 | 4.930 | 4.9 | 0.030 | 0.605 |
+| 5 | 1440 | 3.609 | 3.6 | 0.009 | 0.242 |
+| 10 | 5 | 54.669 | 64.7 | -10.031 | -15.503 |
+| 10 | 10 | 40.020 | 53.8 | -13.780 | -25.613 |
+| 10 | 15 | 33.346 | 42.4 | -9.054 | -21.355 |
+| 10 | 30 | 24.410 | 26.0 | -1.590 | -6.114 |
+| 10 | 60 | 17.869 | 15.9 | 1.969 | 12.387 |
+| 10 | 120 | 13.081 | 11.6 | 1.481 | 12.769 |
+| 10 | 360 | 7.979 | 7.5 | 0.479 | 6.386 |
+| 10 | 720 | 5.841 | 5.5 | 0.341 | 6.198 |
+| 10 | 1440 | 4.276 | 4.1 | 0.176 | 4.288 |
+| 25 | 5 | 65.446 | 76.8 | -11.354 | -14.784 |
+| 25 | 10 | 47.909 | 65.9 | -17.991 | -27.300 |
+| 25 | 15 | 39.919 | 51.8 | -11.881 | -22.937 |
+| 25 | 30 | 29.222 | 31.0 | -1.778 | -5.735 |
+| 25 | 60 | 21.392 | 18.6 | 2.792 | 15.010 |
+| 25 | 120 | 15.660 | 13.2 | 2.460 | 18.635 |
+| 25 | 360 | 9.552 | 8.4 | 1.152 | 13.711 |
+| 25 | 720 | 6.992 | 6.2 | 0.792 | 12.779 |
+| 25 | 1440 | 5.119 | 4.7 | 0.419 | 8.907 |
+| 50 | 5 | 73.440 | 85.8 | -12.360 | -14.405 |
+| 50 | 10 | 53.761 | 74.8 | -21.039 | -28.126 |
+| 50 | 15 | 44.795 | 58.7 | -13.905 | -23.688 |
+| 50 | 30 | 32.792 | 34.7 | -1.908 | -5.499 |
+| 50 | 60 | 24.005 | 20.5 | 3.505 | 17.098 |
+| 50 | 120 | 17.573 | 14.4 | 3.173 | 22.033 |
+| 50 | 360 | 10.719 | 9.1 | 1.619 | 17.786 |
+| 50 | 720 | 7.846 | 6.7 | 1.146 | 17.111 |
+| 50 | 1440 | 5.744 | 5.2 | 0.544 | 10.460 |
+| 100 | 5 | 81.376 | 94.7 | -13.324 | -14.070 |
+| 100 | 10 | 59.571 | 83.7 | -24.129 | -28.828 |
+| 100 | 15 | 49.635 | 65.6 | -15.965 | -24.336 |
+| 100 | 30 | 36.335 | 38.4 | -2.065 | -5.377 |
+| 100 | 60 | 26.599 | 22.4 | 4.199 | 18.745 |
+| 100 | 120 | 19.472 | 15.6 | 3.872 | 24.818 |
+| 100 | 360 | 11.877 | 9.8 | 2.077 | 21.191 |
+| 100 | 720 | 8.694 | 7.2 | 1.494 | 20.753 |
+| 100 | 1440 | 6.365 | 5.6 | 0.765 | 13.653 |
+
+Notice from the above the relationship between the derived values and the EC reference values: at short durations, the derived intensities tend to underestimate the official values, often by 15–30%, while at longer durations the differences shrink and sometimes even reverse, with the derived values becoming slightly higher. This suggests that the underlying model or method used to generate the derived intensities aligns more closely with ECCC data at longer durations, while diverging more at the high‑intensity, short‑duration end of the spectrum. Overall, the dataset reflects a consistent hydrometeorological structure: intensity decreases with duration, increases with return period, and exhibits systematic bias patterns when compared to the reference dataset.
+
+## Selection of Intensity Scaling Factor '$b$'
+
+[work in progress]
