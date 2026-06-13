@@ -175,7 +175,7 @@ where:
 
 $\bar{x}$ is the sample mean;
 $\\s$ is the sample standard deviation, and;
-$\\\gamma = 0.5772$ is the Euler-Mascheroni constant. 
+$\\ \gamma = 0.5772$ is the Euler-Mascheroni constant. 
 
 We then implement this directly.
 
