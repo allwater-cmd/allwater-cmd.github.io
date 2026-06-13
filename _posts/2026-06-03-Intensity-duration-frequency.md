@@ -174,7 +174,7 @@ $$ \beta = \frac{\sqrt{6}}{\pi}s \hspace{8pt} \text{and} \hspace{8pt}  \mu = \ba
 where:
 
 $\bar{x}$ is the sample mean;
-$\\s$ is the sample standard deviation, and;
+$\\ s$ is the sample standard deviation, and;
 $\\ \gamma = 0.5772$ is the Euler-Mascheroni constant. 
 
 We then implement this directly.
