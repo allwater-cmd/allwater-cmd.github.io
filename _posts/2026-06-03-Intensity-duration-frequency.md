@@ -63,7 +63,7 @@ Data used by EC to develop IDF curves consist of rate-of-rainfall observations f
 
 Within the above table, the adjustment factor (DLY03 / 124) is the value used to adjust all of the TBRG values for one day uniformly such that the guage total for the day agrees with standard guage observations. This is done to reduce systematic errors and / or biases found in TBRG data. Additionally, the greatest 24-hour rainfall amount is not archived, but is instead calculated using the hourly data. The EC designations for the observing programs are DLY04 (daily rainfall observations from standard rain guages, not TBRG), DLY03 (daily maximum amounts for various durations from TBRG), and HLY03 (hourly rainfall amounts from TBRG).
 
->CSA PLUS 4013:19 makes it clear that when users obtain EC observational data and compile other datasets for individual IDF calculations, the subjective aspects in the process used by EC as well as the user may result in the user's AMS not being identical to those used by EC.
+>CSA PLUS 4013:19 makes it clear that when users obtain EC observational data and compile other datasets for individual IDF calculations, the subjective aspects in the process used by EC as well as the user may result in the users AMS not being identical to those used by EC.
 
 The figure below shows an example EC IDF curve provided for the Vancouver Harbour CS 1108446. This curve was developed from the calculated maximum 24-hour daily rainfall as well as the DLY03 programs presented in the above table where a Gumbel (Type-I) analysis using the MOM was completed for each rainfall duration. 
 
