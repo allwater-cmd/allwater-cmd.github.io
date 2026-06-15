@@ -250,7 +250,7 @@ To which we can then apply
 
 $$i(d) = i_{24h}\left(\frac{d}{24}\right)^{-b}$$
 
-where $b = 0.45$ is a reasonable choice for coastal climates like Vancouver. You are likely (and rightfully so) asking how we pulled a $b$ value out of thin air. This will be discussed further below, but for now we can just accept it as true.
+where $b = 0.45$ is a reasonable choice for coastal climates like Vancouver. You are likely (and rightfully so) asking how we pulled a $b$ value out of thin air. This will be discussed further [below](#selection-of-duration-scaling-exponent-), but for now we can just accept it as true.
 
 ```python
 b = 0.45
@@ -475,7 +475,34 @@ Notice from the above the relationship between the derived values and the EC ref
 
 **It is critical to note** that we are comparing our projection to the ***empirical*** data provided by EC, not the ***fit curve***. When we look at a comparison of the fit curves (i.e. the straight lines in the log-log space), our derived prediction using daily data is very similar to that developed by EC. Our overestimations and underestimations generally occur in the same places. This suggests that derivation using intensity scaling relationships, at least in this case for Vancouver Harbour CS, provides a defensible resultant IDF curve.
 
-## Selection of Intensity Scaling Factor '$b$'
+## Selection of Duration Scaling Exponent '$b$'
+
+A critical step in deriving short-duration IDF curves from daily rainfall data is the selection of the duration scaling exponent $b$, which governs how rainfall intensity varies with storm duration. In the absense of sub-hourly observations, rainfall intensities are often estimated using a power-law scaling relationship of the form
+
+$$ i(d) = i_{24}\left(\frac{d}{24}\right)^{-b} $$
+
+where 
+
+$\\ i(d)$ is the rainfall intensity at duration $d$; 
+$\\i_{24}$ is the 24-hour intensity, and;
+$\\b$ is a non-dimensional scaling exponent.
+
+This forumulation is consistent with classical IDF theory, in which rainfall intensity decreases with increasing duration according to a power-law or near power-law relationship. The exponent $b$, sometimes referred to as the duration exponent or scaling exponent, encapsulates the time-structure of rainfall process and is therefore one of the most influential parameters in the derivation of inferred IDF curves. Several alternatives with different applicability can be reviewed in further detail [here](https://en.wikipedia.org/wiki/Intensity-duration-frequency_curve).
+
+### Physical Interpretation of $b$
+
+The parameter $b$ controls the rate of change of intensity with duration, and therefore reflects the dominant rainfall-generating mechanisims in a region. A larger value of $b$ implies a steeper decrease in intensity with increasing duration, indicating that short-duration storms are relatively more intense compared to long-duration storms. Conversely, a smaller value of $b$ suggests a more gradual decay of intensity, characteristic of rainfall regimes dominated by longer-duration, lower-intensity events. 
+
+From a hydrological perspective, the mganitude of $b$ is tied to the scale invariance behaviour of rainfall extremes, where rainfall intensities at different durations exhibit approximate self-similar behaviour across time scales. However, real precipitation processes often deviate from perfect scaling, particularly at very short (convective) or very long (frontal, synoptic) durations, leading to curvature in observed IDF relationships. See [this article by copernicus](https://hess.copernicus.org/articles/25/6479/2021/) that goes into extensive detail about these relationships. 
+
+> **Scale invariance** and **self-similar** behaviour describe a pattern or shape that often looks similar when you zoom in or out. The full definition of scale invariance is: *The property of a system, function, or law that remains unchanced when all relevant scales are multiplied by a common factor*.
+
+### Typical Ranges of $b$ in Practice
+In the absense of locally calibrated sub-hourly data, engineers typically select $b$ based on values reported in the literature or inferred from nearby IDF curves (trial and error to get the best approximate fit from non sub-hourly data when compared to an EC IDF curve at the closest station is sometimes appropriate). Across hydrological studies, the exponent $b$ (or equivalently the exponent $n$ in IDF formulations) generally falls within the range
+
+$$ 0.3 \leq b \leq 0.6 $$
+
+This range reflects a wide variety of climatic regimes and is consistent with emperical IDF formulations based on power-law relationships. Below is a table that summarizes typical values, however this is **not meant to be a simple lookup table**, as values are calibrated for each individual case. You will **not find a standard table**, but rather only a range of values provided in literature for specific contexts. Use the below table only for conceptual understanding, not a lookup table. A few direct references which demonstrate exponent ranges are provided below.
 
 ## Depth-Duration-Frequency (DDF) Conversion
 
