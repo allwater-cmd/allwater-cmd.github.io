@@ -474,11 +474,7 @@ A critical step in deriving short-duration IDF curves from daily rainfall data i
 
 $$ i(d) = i_{24}\left(\frac{d}{24}\right)^{-b} $$
 
-where 
-
-$\\ i(d)$ is the rainfall intensity at duration $d$; 
-$\\i_{24}$ is the 24-hour intensity, and;
-$\\b$ is a non-dimensional scaling exponent.
+where $i(d)$ is the rainfall intensity at duration $d$, $i_{24}$ is the 24-hour intensity, and $b$ is a non-dimensional scaling exponent.
 
 This forumulation is consistent with classical IDF theory, in which rainfall intensity decreases with increasing duration according to a power-law or near power-law relationship. The exponent $b$, sometimes referred to as the duration exponent or scaling exponent, encapsulates the time-structure of rainfall process and is therefore one of the most influential parameters in the derivation of inferred IDF curves. Several alternatives with different applicability can be reviewed in further detail [here](https://en.wikipedia.org/wiki/Intensity-duration-frequency_curve).
 
